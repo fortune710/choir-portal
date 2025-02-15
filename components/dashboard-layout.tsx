@@ -29,7 +29,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen w-screen">
         <Sidebar>
           <SidebarHeader>
             <h2 className="text-xl font-bold">Dashboard</h2>
