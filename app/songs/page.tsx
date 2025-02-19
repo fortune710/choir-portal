@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MoreHorizontal, Plus } from 'lucide-react'
+import { MoreHorizontal, } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
