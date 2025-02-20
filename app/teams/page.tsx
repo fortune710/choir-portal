@@ -22,6 +22,9 @@ import {
 } from '@/components/ui/table'
 import NewTeamDialog from './new-team-dialog'
 
+// import { getTeams } from "../api/services/teamsService";
+// const teams = await getTeams();
+
 const teams = [
   {
     id: 1,
@@ -31,6 +34,7 @@ const teams = [
   },
   // Add more teams...
 ]
+
 
 export default function TeamsPage() {
 

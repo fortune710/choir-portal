@@ -8,40 +8,62 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  name       String
-  email      String   @unique
-  password   String
-  created_at DateTime @default(now())
+  id          String   @id @default(uuid()) 
+  name        String
+  email       String   @unique
+  password    String
+  created_at  DateTime @default(now())
 
   // Relations
-  teams Team[]
+  teams       UserTeam[]  // ✅ A user can be in multiple teams
+  roles       UserRole[]  // ✅ A user can have multiple roles
 }
 
 model Team {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) 
   name        String
   description String?
   created_at  DateTime @default(now())
 
   // Relations
-  userId  String // ✅ Foreign Key for User
-  user    User     @relation(fields: [userId], references: [id])
-  members Member[]
+  users       UserTeam[]  // ✅ Many-to-Many with Users
 }
 
-model Member {
-  id         String   @id @default(uuid())
-  name       String
-  role       String
-  teamId     String
-  team       Team     @relation(fields: [teamId], references: [id])
-  created_at DateTime @default(now())
+model UserTeam {
+  id      String @id @default(uuid())
+  userId  String
+  teamId  String
+
+  user    User @relation(fields: [userId], references: [id])
+  team    Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])  // ✅ Prevent duplicate team assignments
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String @unique  // ✅ Admins can create new roles
+
+  // Relations
+  users UserRole[]  // ✅ Many-to-Many with Users
+}
+
+model UserRole {
+  id     String @id @default(uuid())
+  userId String
+  roleId String
+
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId])  // ✅ Prevent duplicate roles for a user
 }
 
 model Song {
-  id         String   @id @default(uuid())
-  title      String
-  artist     String
+  id       String   @id @default(uuid()) 
+  title    String
+  artist   String
+  link     String?  // ✅ YouTube link
+  mp3_url  String?  // ✅ Downloadable MP3 link
   created_at DateTime @default(now())
 }

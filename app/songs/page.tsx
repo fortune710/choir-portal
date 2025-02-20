@@ -20,6 +20,9 @@ import {
 } from '@/components/ui/table'
 import NewSongDialog from './new-song-dialog'
 
+// import { getSongs } from "../api/services/songsService";
+// const songs = getSongs();
+
 const songs = [
   {
     id: 1,
@@ -29,6 +32,8 @@ const songs = [
   },
   // Add more songs...
 ]
+
+
 
 export default function SongsPage() {
 
