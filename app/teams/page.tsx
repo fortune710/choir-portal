@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { MoreHorizontal, Plus } from 'lucide-react'
+import { MoreHorizontal} from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -22,6 +22,9 @@ import {
 } from '@/components/ui/table'
 import NewTeamDialog from './new-team-dialog'
 
+// import { getTeams } from "../api/services/teamsService";
+// const teams = await getTeams();
+
 const teams = [
   {
     id: 1,
@@ -31,6 +34,7 @@ const teams = [
   },
   // Add more teams...
 ]
+
 
 export default function TeamsPage() {
 

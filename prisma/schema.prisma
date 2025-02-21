@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid()) 
+  name        String
+  email       String   @unique
+  password    String
+  created_at  DateTime @default(now())
+
+  // Relations
+  teams       UserTeam[]  // ✅ A user can be in multiple teams
+  roles       UserRole[]  // ✅ A user can have multiple roles
+}
+
+model Team {
+  id          String   @id @default(uuid()) 
+  name        String
+  description String?
+  created_at  DateTime @default(now())
+
+  // Relations
+  users       UserTeam[]  // ✅ Many-to-Many with Users
+}
+
+model UserTeam {
+  id      String @id @default(uuid())
+  userId  String
+  teamId  String
+
+  user    User @relation(fields: [userId], references: [id])
+  team    Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])  // ✅ Prevent duplicate team assignments
+}
+
+model Role {
+  id   String @id @default(uuid())
+  name String @unique  // ✅ Admins can create new roles
+
+  // Relations
+  users UserRole[]  // ✅ Many-to-Many with Users
+}
+
+model UserRole {
+  id     String @id @default(uuid())
+  userId String
+  roleId String
+
+  user   User @relation(fields: [userId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id])
+
+  @@unique([userId, roleId])  // ✅ Prevent duplicate roles for a user
+}
+
+model Song {
+  id       String   @id @default(uuid()) 
+  title    String
+  artist   String
+  link     String?  // ✅ YouTube link
+  mp3_url  String?  // ✅ Downloadable MP3 link
+  created_at DateTime @default(now())
+}

@@ -20,7 +20,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+// import { getUsers } from "../api/services/membersService";
 
+// const members = await getUsers(); // directly from DB
 const members = [
   {
     id: 1,

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { MoreHorizontal, Plus } from 'lucide-react'
+import { MoreHorizontal, } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 
@@ -20,6 +20,9 @@ import {
 } from '@/components/ui/table'
 import NewSongDialog from './new-song-dialog'
 
+// import { getSongs } from "../api/services/songsService";
+// const songs = getSongs();
+
 const songs = [
   {
     id: 1,
@@ -29,6 +32,8 @@ const songs = [
   },
   // Add more songs...
 ]
+
+
 
 export default function SongsPage() {
 
