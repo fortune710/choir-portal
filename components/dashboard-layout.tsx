@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Home, Users, UsersRound, Music, Calendar } from 'lucide-react'
+import { Home, Users, UsersRound, Music, Calendar, ContactRound } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -22,6 +22,7 @@ const menuItems = [
   { title: 'Teams', icon: UsersRound, href: '/teams' },
   { title: 'Songs', icon: Music, href: '/songs' },
   { title: 'Events', icon: Calendar, href: '/events' },
+  { title: 'Roles', icon: ContactRound, href: '/roles' },
 ]
 
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
