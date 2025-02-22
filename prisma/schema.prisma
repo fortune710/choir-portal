@@ -11,7 +11,9 @@ model User {
   id          String   @id @default(uuid()) 
   name        String
   email       String   @unique
-  password    String
+  phone_number String
+  password    String? //User record can be created by admin, but user can only register is record is available
+  avatar      String?
   created_at  DateTime @default(now())
 
   // Relations
