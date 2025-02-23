@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 
 /*
- Get all members from the database
+Get all users (Previously Members)
  */
  export async function getUsers() {
   return await prisma.user.findMany({
@@ -10,25 +10,34 @@ import prisma from "@/lib/prisma";
 }
 
 /* 
-Add a new member
+Add a new user
  */
-export async function addMember(data: { name: string; role: string }) {
-  return await prisma.member.create({ data });
+export async function addUser(data: { name: string; email: string; password: string }) {
+  return await prisma.user.create({ data });
 }
 
 /*
-Get a single member by ID
+Get a user by ID
  */
-export async function getMemberById(id: string) {
-  return await prisma.member.findUnique({ where: { id } });
+export async function getUserById(id: string) {
+  return await prisma.user.findUnique({ where: { id }, include: { roles: true, teams: true } });
 }
 
 /*
-Update an existing member
+Assign a role to a user
  */
-export async function updateMember(id: string, data: { name?: string; role?: string }) {
-  return await prisma.member.update({ where: { id }, data });
+export async function assignRole(userId: string, roleId: string) {
+  return await prisma.userRole.create({ data: { userId, roleId } });
 }
+
+
+/*
+ Assign a user to a team
+ */
+export async function assignUserToTeam(userId: string, teamId: string) {
+  return await prisma.userTeam.create({ data: { userId, teamId } });
+}
+
 
 /* 
 Delete a member by ID
