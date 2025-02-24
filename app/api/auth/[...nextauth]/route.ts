@@ -4,7 +4,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import prisma from "@/lib/prisma";
 import { compare } from "bcryptjs";
 
-// Define custom user type
+
 interface CustomUser extends NextAuthUser {
   id: string;
   isActive: boolean;
