@@ -4,11 +4,11 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
+  url      = "postgresql://johndoe:password123@localhost:5432/choir_project?schema=public"
+  }
 
 model User {
-  id          String   @id @default(uuid()) 
+  id          String   @id @default(uuid())
   name        String
   email       String   @unique
   phone_number String
@@ -16,9 +16,41 @@ model User {
   avatar      String?
   created_at  DateTime @default(now())
 
+  isActive    Boolean  @default(false)  // User must activate account
+  activationToken String? // Token for email activation
+  createdAt   DateTime @default(now())
+
+ // Required for NextAuth
+  accounts    Account[]
+  sessions    Session[]
+
   // Relations
   teams       UserTeam[]  // ✅ A user can be in multiple teams
   roles       UserRole[]  // ✅ A user can have multiple roles
+}
+
+model Account {
+  id                 String  @id @default(uuid())
+  userId             String  @unique
+  type               String
+  provider           String
+  providerAccountId  String  @unique
+  refresh_token      String?
+  access_token       String?
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?
+  session_state      String?
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id          String   @id @default(uuid())
+  sessionToken String  @unique
+  userId      String
+  expires     DateTime
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Team {
