@@ -43,5 +43,5 @@ export async function assignUserToTeam(userId: string, teamId: string) {
 Delete a member by ID
  */
 export async function deleteMember(id: string) {
-  return await prisma.member.delete({ where: { id } });
+  return await prisma.user.delete({ where: { id } });
 }

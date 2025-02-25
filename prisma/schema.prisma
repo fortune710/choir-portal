@@ -76,6 +76,7 @@ model Role {
 
   // Relations
   users UserRole[]  // ✅ Many-to-Many with Users
+  createdAt   DateTime @default(now())
 }
 
 model UserRole {
@@ -97,3 +98,11 @@ model Song {
   mp3_url  String?  // ✅ Downloadable MP3 link
   created_at DateTime @default(now())
 }
+
+model Member {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  createdAt DateTime @default(now())
+}
+
