@@ -1,6 +1,10 @@
-import { verifyToken } from "@/lib/auth";
+import { verifyToken } from "../../../../lib/auth";
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
+
+interface DecodedToken {
+  userId: string;
+}
 
 export async function GET(req: Request) {
   try {
@@ -12,8 +16,8 @@ export async function GET(req: Request) {
 
     // Extract and verify token
     const token = authHeader.split(" ")[1];
-    const decoded = verifyToken(token);
-    if (!decoded) {
+    const decoded = verifyToken(token) as DecodedToken;
+    if (!decoded?.userId) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 });
     }
 
@@ -25,6 +29,6 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ success: true, user });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to fetch user", details: error }, { status: 500 });
+    return NextResponse.json({ error: "Failed to fetch user", details: String(error) }, { status: 500 });
   }
 }
