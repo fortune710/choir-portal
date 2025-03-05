@@ -30,9 +30,14 @@ export const authOptions: NextAuthOptions = {
           throw new Error("User not found");
         }
 
+        if (!user.password) {
+          throw new Error("User has not registered");
+        }
+
         if (!user.isActive) {
           throw new Error("Account not activated. Check your email.");
         }
+
 
         const isValidPassword = await compare(credentials.password, user.password);
         if (!isValidPassword) {
