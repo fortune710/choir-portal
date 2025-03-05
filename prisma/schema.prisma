@@ -75,7 +75,7 @@ model UserTeam {
 
 model Role {
   id   String @id @default(uuid())
-  name String @unique  // ✅ Admins can create new roles
+  name String  // ✅ Admins can create new roles
 
   // Relations
   users UserRole[]  // ✅ Many-to-Many with Users
