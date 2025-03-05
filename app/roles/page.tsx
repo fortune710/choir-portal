@@ -1,85 +1,63 @@
 import * as React from 'react'
-import { MoreHorizontal, } from 'lucide-react'
-
+import { Filter, MoreHorizontal, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import NewRoleDialog from './new-role-dialog'
+import { getRoles } from '@/services/rolesService'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent } from '@/components/ui/card'
+import RolesTable from '@/components/roles/roles-table'
 
-// import { getSongs } from "../api/services/songsService";
-// const songs = getSongs();
-
-const songs = [
-  {
-    id: 1,
-    name: 'Amazing Grace',
-    youtubeLink: 'https://youtube.com/watch?v=...',
-    key: 'G',
-  },
-  // Add more songs...
-]
-
-
-
-export default function RolesPage() {
-
+export default async function RolesPage() {
+  const roles = await getRoles();
+  const formattedRoles = roles.map((role) => ({
+    id: role.id,
+    memberCount: role._count.users,
+    permissionsCount: 0,
+    createdAt: role.createdAt,
+    name: role.name
+  }))
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Roles</h1>
-        <NewRoleDialog/>
+    <div className="flex flex-col gap-4 md:gap-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Roles</h1>
+          <p className="text-muted-foreground">Access and manage all your roles and permissions</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <NewRoleDialog/>
+        </div>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Role Name</TableHead>
-            <TableHead>Member Count</TableHead>
-            <TableHead>Permissions Count</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {songs.map((song) => (
-            <TableRow key={song.id}>
-              <TableCell>{song.name}</TableCell>
-              <TableCell>
-                <a href={song.youtubeLink} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                  Watch on YouTube
-                </a>
-              </TableCell>
-              <TableCell>{song.key}</TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="h-8 w-8 p-0">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>Delete</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      
+
+      <div className="flex-1">
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input type="search" placeholder="Search Roles" className="pl-8" />
+          </div>
+          <Button variant="outline" className="sm:w-auto">
+            <Filter className="mr-2 h-4 w-4" /> Sort
+          </Button>
+        </div>
+
+
+
+        {roles.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-[400px] border rounded-lg">
+            <p className="text-xl font-medium text-muted-foreground mb-2">No roles found</p>
+            <p className="text-sm text-muted-foreground mb-4">Get started by adding your first role</p>
+            <NewRoleDialog />
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-0">
+              <RolesTable roles={formattedRoles}/>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   )
 }
