@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://johndoe:password123@localhost:5432/choir_project?schema=public"
-  }
+  url      = env("DATABASE_URL")
+}
 
 model User {
   id          String   @id @default(uuid())
@@ -18,7 +18,6 @@ model User {
 
   isActive    Boolean  @default(false)  // User must activate account
   activationToken String? // Token for email activation
-  createdAt   DateTime @default(now())
 
  // Required for NextAuth
   accounts    Account[]
@@ -100,4 +99,5 @@ model Song {
   link     String?  // ✅ YouTube link
   mp3_url  String?  // ✅ Downloadable MP3 link
   created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 }
