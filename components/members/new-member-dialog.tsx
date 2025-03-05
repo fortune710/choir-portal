@@ -60,17 +60,17 @@ export default function NewMemberForm() {
                     <section className="space-y-4 my-3">
                         <div className='grid gap-2'>
                             <Label htmlFor="name">Member Name</Label>
-                            <Input id="name" required />
+                            <Input name='name' id="name" required />
                         </div>
 
                         <div className='grid gap-2'>
                             <Label htmlFor="email">Member Email</Label>
-                            <Input id="email" type='email' required />
+                            <Input name='email' id="email" type='email' required />
                         </div>
 
                         <div className='grid gap-2'>
                             <Label htmlFor="phone">Member Phone Number</Label>
-                            <Input id="phone" required />
+                            <Input name='phone_number' id="phone" required />
                         </div>
 
                         {/* Will Add select for Roles Later */}

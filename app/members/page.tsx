@@ -1,33 +1,14 @@
 
 import * as React from 'react'
-import Image from 'next/image'
 
-import { Badge } from '@/components/ui/badge'
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import NewMemberForm from './new-member-dialog'
+import NewMemberForm from '@/components/members/new-member-dialog'
 import { getUsers } from '@/services/usersService'
-// import { getUsers } from "../api/services/membersService";
+import { Filter, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import MembersTable from '@/components/members/members-table';
 
-// const members = await getUsers(); // directly from DB
-const members = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '123-456-7890',
-    roles: ['Admin', 'Singer'],
-    profilePicture: '/placeholder.svg?height=40&width=40',
-  },
-  // Add more members...
-]
 
 export default async function MembersPage() {
 
@@ -42,49 +23,42 @@ export default async function MembersPage() {
   }))
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">Members</h1>
-        <NewMemberForm/>
+    <div className="flex flex-col gap-4 md:gap-8">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Members</h1>
+          <p className="text-muted-foreground">View all your members in one place</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <NewMemberForm/>
+        </div>
       </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Profile</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Phone</TableHead>
-            <TableHead>Roles</TableHead>
-            <TableHead/>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {/* Will create UI for empty state */}
-          {members.map((member) => (
-            <TableRow key={member.id}>
-              <TableCell>
-                <Image
-                  src={member.avatar || "/placeholder.svg"}
-                  alt={member.name}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              </TableCell>
-              <TableCell>{member.name}</TableCell>
-              <TableCell>{member.email}</TableCell>
-              <TableCell>{member.phone}</TableCell>
-              <TableCell>
-                {member.roles.map((role) => (
-                  <Badge key={role} className="mr-1">
-                    {role}
-                  </Badge>
-                ))}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      <div className="flex-1">
+        <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input type="search" placeholder="Search members" className="pl-8" />
+          </div>
+          <Button variant="outline" className="sm:w-auto">
+            <Filter className="mr-2 h-4 w-4" /> Sort
+          </Button>
+        </div>
+
+        {members.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-[400px] border rounded-lg">
+            <p className="text-xl font-medium text-muted-foreground mb-2">No members found</p>
+            <p className="text-sm text-muted-foreground mb-4">Get started by adding your first member</p>
+            <NewMemberForm/>
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="p-0">
+              <MembersTable members={members} />
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </div>
   )
 }

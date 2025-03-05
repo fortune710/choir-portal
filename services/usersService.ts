@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import { User } from "@prisma/client"
 
-interface CreateUser extends Omit<User, "id" | "created_at" | "password" | "avatar"> {}
+interface CreateUser extends Omit<User, 
+"id" | "created_at" | "password" | "avatar" | "isActive" | "activationToken"> {}
 
 /*
  Get all members from the database
