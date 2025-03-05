@@ -57,7 +57,15 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = (user as CustomUser).id;
-        token.isActive = (user as CustomUser).isActive; // ✅ Fix: Explicitly cast user to CustomUser
+        token.isActive = (user as CustomUser).isActive;
+  
+        // Fetch user roles from database
+        const userRoles = await prisma.userRole.findMany({
+          where: { userId: user.id },
+          include: { role: true },
+        });
+  
+        token.roles = userRoles.map((r) => r.role.name); // ✅ Store roles in JWT
       }
       return token;
     },
@@ -67,7 +75,8 @@ export const authOptions: NextAuthOptions = {
         user: {
           ...session.user,
           id: token.id,
-          isActive: token.isActive, // ✅ Fix: Ensure isActive is included
+          isActive: token.isActive,
+          roles: token.roles || [], // ✅ Ensure roles are included in session
         },
       };
     },

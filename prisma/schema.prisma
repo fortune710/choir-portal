@@ -79,6 +79,7 @@ model Role {
 
   // Relations
   users UserRole[]  // ✅ Many-to-Many with Users
+  createdAt   DateTime @default(now())
 }
 
 model UserRole {
@@ -101,3 +102,11 @@ model Song {
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
+
+model Member {
+  id        String   @id @default(uuid())
+  name      String
+  role      String
+  createdAt DateTime @default(now())
+}
+
