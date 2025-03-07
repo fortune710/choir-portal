@@ -7,7 +7,10 @@ export async function getRoles() {
   return await prisma.role.findMany({
     include: {
       _count: {
-        select: { users: true }
+        select: { 
+          users: true,
+          permissions: true 
+        }
       }
     },
     orderBy: {
@@ -75,4 +78,36 @@ export async function removeRoleFromUser(userId: string, roleId: string) {
       roleId,
     }
   });
+}
+
+/*
+  Assign permissions to a role
+ */
+export async function assignPermissionsToRole(roleId: string, permissionIds: string[]) {
+  // First, remove all existing permissions
+  await prisma.rolePermission.deleteMany({
+    where: { roleId }
+  });
+
+  // Then, create new permission assignments
+  const permissionData = permissionIds.map(permissionId => ({
+    roleId,
+    permissionId
+  }));
+
+  return await prisma.rolePermission.createMany({
+    data: permissionData
+  });
+}
+
+/*
+  Get role permissions
+ */
+export async function getRolePermissions(roleId: string) {
+  const permissions = await prisma.rolePermission.findMany({
+    where: { roleId },
+    select: { permissionId: true }
+  });
+
+  return permissions.map(p => p.permissionId);
 } 

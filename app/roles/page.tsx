@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { Filter, MoreHorizontal, Search } from 'lucide-react'
+import { Filter, Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
-import NewRoleDialog from './new-role-dialog'
+import NewRoleDialog from '@/components/roles/new-role-dialog'
 import { getRoles } from '@/services/rolesService'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
@@ -13,7 +13,7 @@ export default async function RolesPage() {
   const formattedRoles = roles.map((role) => ({
     id: role.id,
     memberCount: role._count.users,
-    permissionsCount: 0,
+    permissionsCount: role._count.permissions,
     createdAt: role.createdAt,
     name: role.name
   }))
