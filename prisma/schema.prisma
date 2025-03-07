@@ -74,12 +74,13 @@ model UserTeam {
 }
 
 model Role {
-  id   String @id @default(uuid())
-  name String  // ✅ Admins can create new roles
+  id          String   @id @default(uuid())
+  name        String   
+  createdAt   DateTime @default(now())
 
   // Relations
-  users UserRole[]  // ✅ Many-to-Many with Users
-  createdAt   DateTime @default(now())
+  users       UserRole[]        
+  permissions RolePermission[]  // Relation to track assigned permissions
 }
 
 model UserRole {
@@ -91,6 +92,18 @@ model UserRole {
   role   Role @relation(fields: [roleId], references: [id])
 
   @@unique([userId, roleId])  // ✅ Prevent duplicate roles for a user
+}
+
+model RolePermission {
+  id           String   @id @default(uuid())
+  roleId       String
+  permissionId String   // This will store the hardcoded permission ID (e.g., "members.view")
+  createdAt    DateTime @default(now())
+
+  // Relations
+  role         Role     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])  // Prevent duplicate permissions for a role
 }
 
 model Song {
