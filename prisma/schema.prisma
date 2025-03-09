@@ -60,6 +60,7 @@ model Team {
 
   // Relations
   users       UserTeam[]  // ✅ Many-to-Many with Users
+  events      EventTeam[] //Many-to-Many with Events
 }
 
 model UserTeam {
@@ -123,3 +124,31 @@ model Member {
   createdAt DateTime @default(now())
 }
 
+model Events {
+  id        String   @id @default(uuid())
+  name      String
+  description String
+
+  type      EventType
+  date      DateTime
+  startTime      DateTime
+  endTime       DateTime
+  createdAt DateTime @default(now())
+
+  teams     EventTeam[]
+}
+
+model EventTeam {
+  id        String   @id @default(uuid())
+  teamId    String
+  eventId   String
+  team      Team     @relation(fields: [teamId], references: [id])
+  event     Events   @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+enum EventType {
+  REHEARSAL
+  SERVICE
+  SPECIAL
+}
