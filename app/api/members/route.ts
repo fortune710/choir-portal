@@ -1,15 +1,14 @@
-import { NextResponse } from "next/server";
-//import {  addUser } from "../services/usersService";
+import { getUsers } from "@/services/usersService"
+import { NextResponse } from "next/server"
 
-
-
-
-export async function POST(req: Request){
-    try{
-      const body = await req.json()
-      //const newMember = await addUser(body)
-      return NextResponse.json({success:true,})
-    }catch (error) {
-        return NextResponse.json({ success:false, error: error}, {status: 400})
+export async function GET() {
+    try {
+        const members = await getUsers()
+        return NextResponse.json(members)
+    } catch (error) {
+        return NextResponse.json(
+            { error: "Failed to fetch members" },
+            { status: 500 }
+        )
     }
 }
