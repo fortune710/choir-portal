@@ -35,7 +35,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           <SidebarHeader>
             <h2 className="text-xl font-bold">Dashboard</h2>
           </SidebarHeader>
-          <SidebarContent>
+          <SidebarContent className='px-2'>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
