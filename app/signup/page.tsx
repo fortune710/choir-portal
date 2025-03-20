@@ -1,26 +1,28 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+// import { signIn } from "next-auth/react"; // ✅ Import signIn
+
+// import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { AuthLayout } from "@/components/auth-layout";
-import { LoginFormWithAction } from "./login-form-with-action";
+import { SignupFormWithAction } from "./signup-form-with-action";
 import { OAuthButtons } from "../components/auth/OAuthButtons";
-// import { OAuthButtons } from "@/components/auth/OAuthButtons"; // ✅ Import the Client Component
 
 export const metadata: Metadata = {
-  title: "Login | Choir Portal",
-  description: "Login to your Choir Portal account",
+  title: "Sign Up | Choir Portal",
+  description: "Create a new Choir Portal account",
 };
 
-export default function LoginPage() {
+export default function SignupPage() {
   return (
     <AuthLayout>
       <Card className="mx-auto max-w-md w-full">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
-          <CardDescription>Enter your email and password to access your account</CardDescription>
+          <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
+          <CardDescription>Enter your information to create a Choir Portal account</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <LoginFormWithAction />
+          <SignupFormWithAction />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -31,18 +33,16 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <OAuthButtons /> {/* ✅ Now using the Client Component */}
-
+          {/* ✅ Move Buttons to a Client Component */}
+          <OAuthButtons />
         </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <div className="text-center text-sm">
-            Don&apos;t have an account?{" "}
-            <Link href="/signup" className="text-primary hover:underline">
-              Sign up
-            </Link>
-          </div>
+        <CardFooter className="text-center">
+          Already have an account?{" "}
+          <Link href="/login" className="text-primary hover:underline">Login</Link>
         </CardFooter>
       </Card>
     </AuthLayout>
   );
 }
+
+

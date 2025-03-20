@@ -8,15 +8,20 @@ datasource db {
 }
 
 model User {
-  id         String   @id @default(uuid())
-  name       String
-  email      String   @unique
-  password   String
-  created_at DateTime @default(now())
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  role     String  @default("user") // Can be "admin", "moderator", etc.
+  createdAt DateTime @default(now())
 
   // Relations
   teams Team[]
 }
+
+
+
+
 
 model Team {
   id          String   @id @default(uuid())

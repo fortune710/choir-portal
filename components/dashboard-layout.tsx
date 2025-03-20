@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/sidebar'
 
 const menuItems = [
-  { title: 'Home', icon: Home, href: '/' },
+  { title: 'Home', icon: Home, href: '/dashboard' },
   { title: 'Members', icon: Users, href: '/members' },
   { title: 'Teams', icon: UsersRound, href: '/teams' },
   { title: 'Songs', icon: Music, href: '/songs' },
