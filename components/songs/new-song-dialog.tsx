@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label'
 import { createSong } from "@/actions/songs";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Textarea } from '../ui/textarea';
 
 export default function NewSongDialog() {
     const [open, setOpen] = useState(false);
@@ -55,6 +56,15 @@ export default function NewSongDialog() {
                     <div className='grid gap-2'>
                         <Label htmlFor="mp3">MP3 File (Optional)</Label>
                         <Input id="mp3" name="mp3" type="file" accept=".mp3" />
+                    </div>
+                    <div className='grid gap-2'>
+                        <Label htmlFor="song_key">Key (Optional)</Label>
+                        <Input id="song_key" name="song_key" />
+                    </div>
+
+                    <div className='grid gap-2'>
+                        <Label htmlFor="song_lyrics">Lyrics (Optional)</Label>
+                        <Textarea id="song_lyrics" name="song_lyrics" />
                     </div>
                     <Button type="submit">Add Song</Button>
                 </form>
