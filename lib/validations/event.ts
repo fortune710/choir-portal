@@ -12,7 +12,7 @@ const timeStringToDate = (timeStr: string, baseDate: Date) => {
 
 export const eventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   type: z.nativeEnum(EventType, {
     errorMap: () => ({ message: "Please select a valid event type" })
   }),
@@ -23,10 +23,10 @@ export const eventSchema = z.object({
   }, "Cannot create events in the past"),
   startTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
   endTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
-  meetingUrl: z.string().url("Please enter a valid URL").optional(),
-  dressCode: z.string().optional(),
-  guestLead: z.string().optional(),
-  prayerPoints: z.string().optional(),
+  meetingUrl: z.string().url("Please enter a valid URL").optional().nullable(),
+  dressCode: z.string().optional().nullable(),
+  guestLead: z.string().optional().nullable(),
+  prayerPoints: z.string().optional().nullable(),
 }).refine((data) => {
   const eventDate = new Date(data.date)
   const startDateTime = timeStringToDate(data.startTime, eventDate)
