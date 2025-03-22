@@ -13,10 +13,12 @@ export async function createTeam(formData: FormData) {
     try {
         const teamName = formData.get("name")?.toString() ?? "";
         const description = formData.get("description")?.toString();
-
+        const coordinator = formData.get("team_coordinator")?.toString() ?? "";
+        
         await addTeam({
             name: teamName,
             description,
+            coordinator
         });
 
         revalidatePath('/teams');

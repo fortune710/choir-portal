@@ -28,6 +28,13 @@ interface PermissionsDialogProps {
     roleName: string,
 }
 
+async function fetchRolePermissions(roleId: string) {
+    const response = await fetch(`/api/roles/${roleId}`)
+    if (!response.ok) {
+        throw new Error('Failed to fetch role permissions')
+    }
+    return response.json()
+}
 
 export default function PermissionsDialog({
     open,
@@ -45,10 +52,8 @@ export default function PermissionsDialog({
     const { isLoading } = useQuery({
         queryKey: ['rolePermissions', roleId],
         queryFn: async () => {
-            //Create Route handler for this
-            //const data = await getRolePermissions(roleId);
-            setSelectedPermissions([])
-            return []
+            const data = await fetchRolePermissions(roleId)
+            setSelectedPermissions(data)
         },
         enabled: !!roleId && open,
     })

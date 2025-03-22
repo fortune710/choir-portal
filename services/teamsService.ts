@@ -18,8 +18,14 @@ export async function getTeams() {
 /*
   Add a new team
  */
-export async function addTeam(data: { name: string; description?: string }) {
-  return await prisma.team.create({ data });
+export async function addTeam(data: { name: string; description?: string, coordinator: string }) {
+  const { coordinator,  ...rest } = data;
+  return await prisma.team.create({ 
+    data: {
+      ...rest,
+      coordinator_user_id: coordinator,
+    } 
+  });
 }
 
 /*

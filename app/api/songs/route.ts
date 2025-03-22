@@ -1,6 +1,24 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma"; 
+import { getSongs } from "@/services/songsService";
 
+export async function GET() {
+
+  try {
+    const songs = await getSongs();
+    return NextResponse.json({
+      data: songs,
+      success: true
+    })
+
+  } catch (err: any) {
+    return NextResponse.json({
+      data: null,
+      success: false,
+    })
+  }
+
+}
 
 
 export async function POST(req: Request) {

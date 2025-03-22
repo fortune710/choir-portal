@@ -20,6 +20,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { UserX } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMembers } from '@/hooks/use-member'
 
 interface ManageMembersDialogProps {
     open: boolean
@@ -38,13 +39,7 @@ async function fetchTeam(teamId: string) {
     return response.json()
 }
 
-async function fetchMembers() {
-    const response = await fetch('/api/members')
-    if (!response.ok) {
-        throw new Error('Failed to fetch members')
-    }
-    return response.json()
-}
+
 
 export default function ManageMembersDialog({ 
     open, 
@@ -62,11 +57,7 @@ export default function ManageMembersDialog({
     })
 
     // Fetch all available members
-    const { data: allMembers, isLoading: isLoadingMembers } = useQuery({
-        queryKey: ['members'],
-        queryFn: fetchMembers,
-        enabled: open, // Only fetch when dialog is open
-    })
+    const { allMembers, isLoadingMembers } = useMembers(open);
 
     // Add member mutation
     const { mutate: addMember } = useMutation({

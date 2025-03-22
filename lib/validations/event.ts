@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { startOfDay, isBefore } from "date-fns"
+import { EventType } from "@prisma/client"
 
 // Helper function to convert time string to Date
 const timeStringToDate = (timeStr: string, baseDate: Date) => {
@@ -12,7 +13,7 @@ const timeStringToDate = (timeStr: string, baseDate: Date) => {
 export const eventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
   description: z.string().optional(),
-  type: z.enum(["REHEARSAL", "SERVICE", "SPECIAL"], {
+  type: z.nativeEnum(EventType, {
     errorMap: () => ({ message: "Please select a valid event type" })
   }),
   date: z.string().refine((date) => {
@@ -22,6 +23,10 @@ export const eventSchema = z.object({
   }, "Cannot create events in the past"),
   startTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
   endTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
+  meetingUrl: z.string().url("Please enter a valid URL").optional(),
+  dressCode: z.string().optional(),
+  guestLead: z.string().optional(),
+  prayerPoints: z.string().optional(),
 }).refine((data) => {
   const eventDate = new Date(data.date)
   const startDateTime = timeStringToDate(data.startTime, eventDate)
