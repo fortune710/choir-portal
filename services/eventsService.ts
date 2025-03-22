@@ -230,3 +230,26 @@ export async function getEventsWithoutSong(songId: string) {
     },
   });
 }
+
+// ... existing imports ...
+import { addDays } from "date-fns";
+
+/*
+  Get upcoming events (next 5)
+ */
+export async function getUpcomingEvents() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return await prisma.events.findMany({
+    where: {
+      date: {
+        gte: today,
+      },
+    },
+    orderBy: {
+      date: 'asc',
+    },
+    take: 5, // Get only next 5 events
+  });
+}

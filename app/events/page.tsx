@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { getEvents } from '@/services/eventsService'
+import { getEvents, getUpcomingEvents } from '@/services/eventsService'
 import { Filter, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -7,9 +7,14 @@ import { Card, CardContent } from '@/components/ui/card'
 import EventsTable from '@/components/events/events-table'
 import NewEventDialog from '@/components/events/new-event-dialog'
 import { Calendar } from '@/components/ui/calendar'
+import { Badge } from '@/components/ui/badge'
+import { format } from 'date-fns'
 
 export default async function EventsPage() {
-  const eventsData = await getEvents()
+  const [eventsData, upcomingEvents] = await Promise.all([
+    getEvents(),
+    getUpcomingEvents()
+  ]);
   
   const events = eventsData.map((event) => ({
     ...event,
@@ -22,6 +27,9 @@ export default async function EventsPage() {
     endTime: event.endTime,
     teams: event.teams.map(eventTeam => eventTeam.team.name)
   }))
+
+  // Format upcoming events for the calendar
+  const upcomingDates = upcomingEvents.map(event => new Date(event.date))
 
   return (
     <div className='grid grid-cols-8 w-full border-green-60'>
@@ -63,10 +71,38 @@ export default async function EventsPage() {
         </div>
       </div>
       
-      <section className='col-span-2'>
-        <Calendar
-          className='mx-auto'
-        />
+      <section className='col-span-2 px-3.5'>
+        <div className='w-full flex justify-center mb-3'>
+          <Calendar
+            mode="multiple"
+            selected={upcomingDates}
+            className='mx-auto'
+          />
+        </div>
+
+        {/* Upcoming Events List */}
+        <Card>
+          <CardContent className="p-4">
+            <h3 className="font-semibold mb-3">Upcoming Events</h3>
+            <div className="space-y-2">
+              {upcomingEvents.map((event) => (
+                <div key={event.id} className="flex flex-col space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium">{event.name}</span>
+                    <Badge variant="outline">{event.type}</Badge>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {format(new Date(event.date), 'PPP')}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    {format(new Date(event.startTime), 'p')} - {format(new Date(event.endTime), 'p')}
+                  </span>
+                  <div className="border-t my-2" />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </section>
     </div>
   )
