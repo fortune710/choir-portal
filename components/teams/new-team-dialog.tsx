@@ -17,9 +17,19 @@ import { Textarea } from '@/components/ui/textarea'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { useMembers } from '@/hooks/use-member'
+
 
 export default function NewTeamDialog() {
     const [dialogOpen, setDialogOpen] = useState(false);
+    const { allMembers, isLoadingMembers } = useMembers();
 
     const createNewTeam = async (formData: FormData) => {
         const teamName = formData.get("name")?.toString() ?? "";
@@ -71,6 +81,28 @@ export default function NewTeamDialog() {
                                 name="description" 
                                 placeholder="Brief description of the team's purpose"
                             />
+                        </div>
+
+                        <div className='grid gap-2'>
+                            <Label htmlFor="team_coordinator">Event Coordinator</Label>
+                            <Select name="team_coordinator" required>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select event coordinator" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {isLoadingMembers ? (
+                                        <SelectItem value="loading" disabled>
+                                            Loading coordinators...
+                                        </SelectItem>
+                                    ) : (
+                                        allMembers?.map((user: any) => (
+                                            <SelectItem key={user.id} value={user.id}>
+                                                {user.name}
+                                            </SelectItem>
+                                        ))
+                                    )}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </section>
 

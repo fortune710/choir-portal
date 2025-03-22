@@ -27,6 +27,7 @@ import { eventSchema } from '@/lib/validations/event'
 
 export default function NewEventDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [eventType, setEventType] = useState("");
 
   const validateForm = (formData: FormData) => {
     const data = {
@@ -36,6 +37,10 @@ export default function NewEventDialog() {
       date: formData.get("date"),
       startTime: formData.get("startTime"),
       endTime: formData.get("endTime"),
+      meetingUrl: formData.get("meetingUrl"),
+      dressCode: formData.get("dressCode"),
+      guestLead: formData.get("guestLead"),
+
     }
 
     const result = eventSchema.safeParse(data)
@@ -103,14 +108,16 @@ export default function NewEventDialog() {
 
             <div className='grid gap-2'>
               <Label htmlFor="type">Event Type</Label>
-              <Select name="type" required>
+              <Select onValueChange={(value) => setEventType(value)} name="type" required>
                 <SelectTrigger>
                   <SelectValue placeholder="Select event type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="REHEARSAL">Rehearsal</SelectItem>
-                  <SelectItem value="SERVICE">Service</SelectItem>
-                  <SelectItem value="SPECIAL">Special</SelectItem>
+                  <SelectItem value="SERVICE">Regular Service</SelectItem>
+                  <SelectItem value="AUXILIARY">Auxiliary Service</SelectItem>
+                  <SelectItem value="PRAYER">Prayer Meeting</SelectItem>
+                  <SelectItem value="WORKSHOP">Workshop/Training</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -130,6 +137,37 @@ export default function NewEventDialog() {
                 <Input name='endTime' id="endTime" type="time" required />
               </div>
             </div>
+
+            {
+              ['SERVICE', 'AUXILIARY'].includes(eventType) ? (
+                <>
+                  <div className='grid gap-2'>
+                    <Label htmlFor="guestLead">Guest Lead (Optional)</Label>
+                    <Input name='guestLead' id="guestLead" />
+                  </div>
+
+                  <div className='grid gap-2'>
+                    <Label htmlFor="dressCode">Dress Code (Optional)</Label>
+                    <Textarea name='dressCode' id="dressCode" />
+                  </div>
+                
+                </>
+              ) : ['WORKSHOP', 'PRAYER', 'TOWNHALL'].includes(eventType) ? (
+                <>
+                  <div className='grid gap-2'>
+                    <Label htmlFor="meetingUrl">Meeting Link - Google Meet or Zoom (Optional)</Label>
+                    <Input name='meetingUrl' id="meetingUrl" />
+                  </div>
+                </>
+              ) : ['PRAYER'].includes(eventType) ? (
+                <>
+                  <div className='grid gap-2'>
+                    <Label htmlFor="prayerPoints">Prayer Points</Label>
+                    <Textarea name='prayerPoints' id="prayerPoints" />
+                  </div>
+                </>
+              ) : null
+            }
           </section>
           
           <DialogFooter>

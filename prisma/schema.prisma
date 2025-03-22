@@ -18,14 +18,22 @@ model User {
 
   isActive    Boolean  @default(false)  // User must activate account
   activationToken String? // Token for email activation
+  vocalCategory  String?
+  birthday DateTime?
 
  // Required for NextAuth
   accounts    Account[]
   sessions    Session[]
 
   // Relations
+  eventTeam   EventTeam[]
+  coordinatedTeams Team[]
+  eventsLed   Events[]
   teams       UserTeam[]  // ✅ A user can be in multiple teams
   roles       UserRole[]  // ✅ A user can have multiple roles
+
+  // New relation for event members
+  eventParticipations EventMember[]
 }
 
 model Account {
@@ -57,8 +65,10 @@ model Team {
   name        String
   description String?
   created_at  DateTime @default(now())
+  coordinator_user_id String?
 
   // Relations
+  coordinator  User? @relation(fields: [coordinator_user_id], references: [id])
   users       UserTeam[]  // ✅ Many-to-Many with Users
   events      EventTeam[] //Many-to-Many with Events
 }
@@ -115,6 +125,10 @@ model Song {
   mp3_url  String?  // ✅ Downloadable MP3 link
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
+  key String?
+  lyrics String? @db.Text
+
+  event EventSong[]
 }
 
 model Member {
@@ -135,20 +149,74 @@ model Events {
   endTime       DateTime
   createdAt DateTime @default(now())
 
+  meetingUrl String?
+
+  prayerPoints String? @db.Text
+
+  dressCode String?
+  guestLead String?
+  eventLeadUserId String?
+
+  isRecurring Boolean @default(false)
+  recurrenceRule String? // e.g., "WEEKLY", "MONTHLY"
+  recurrenceEndDate DateTime?
+  parentEventId String? // To track which event this was created from
+  parent Events? @relation("RecurringEvents", fields: [parentEventId], references: [id])
+  childEvents Events[] @relation("RecurringEvents")
+
+  eventLead User? @relation(fields: [eventLeadUserId], references: [id])
   teams     EventTeam[]
+  songs     EventSong[]
+
+  // New relation for members
+  members   EventMember[]
 }
 
 model EventTeam {
   id        String   @id @default(uuid())
   teamId    String
   eventId   String
+  coordinatorUserId String?
+
+  coordinator User? @relation(fields: [coordinatorUserId], references: [id])
   team      Team     @relation(fields: [teamId], references: [id])
   event     Events   @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
+
+  @@unique([eventId, teamId])
+}
+
+model EventSong {
+  id  String @id @default(uuid())
+  eventId String
+  songId String
+
+  song  Song @relation(fields: [songId], references: [id])
+  event     Events   @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
+
+   @@unique([eventId, songId])
+}
+
+// New model for event members
+model EventMember {
+  id        String   @id @default(uuid())
+  eventId   String
+  memberId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  event     Events   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  member    User     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, memberId]) // Prevent duplicate assignments
 }
 
 enum EventType {
   REHEARSAL
   SERVICE
-  SPECIAL
+  AUXILIARY
+  PRAYER
+  WORKSHOP
 }

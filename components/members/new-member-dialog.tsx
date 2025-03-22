@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 
 export default function NewMemberForm() {
     //Wouldn't need this normally but this will help us close 
@@ -71,6 +72,26 @@ export default function NewMemberForm() {
                         <div className='grid gap-2'>
                             <Label htmlFor="phone">Member Phone Number</Label>
                             <Input name='phone_number' id="phone" required />
+                        </div>
+
+                        <div className='grid gap-2'>
+                            <Label htmlFor="vocal_category">Vocal Category</Label>
+                            <Select name='vocal_category'>
+                                <SelectTrigger name='vocal_category'>
+                                    <SelectValue placeholder="Select a category" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value='soprano'>Soprano</SelectItem>
+                                    <SelectItem value='alto'>Alto</SelectItem>
+                                    <SelectItem value='tenor'>Tenor</SelectItem>
+                                    <SelectItem value='bass'>Bass</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div className='grid gap-2'>
+                            <Label htmlFor="birthday">Birthday</Label>
+                            <Input name='birthday' id="birthday" type='date' required />
                         </div>
 
                         {/* Will Add select for Roles Later */}
