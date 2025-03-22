@@ -73,7 +73,7 @@ export default function EditEventDialog({
 
       await updateEvent(event.id, {
         name: validatedDetails.name,
-        description: validatedDetails.description,
+        description: validatedDetails.description ?? undefined,
         type: validatedDetails.type,
         date,
         startTime,
@@ -132,9 +132,11 @@ export default function EditEventDialog({
                   <SelectValue placeholder="Select event type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="REHEARSAL">Rehearsal</SelectItem>
-                  <SelectItem value="SERVICE">Service</SelectItem>
-                  <SelectItem value="AUXILIARY">Special</SelectItem>
+                    <SelectItem value="REHEARSAL">Rehearsal</SelectItem>
+                  <SelectItem value="SERVICE">Regular Service</SelectItem>
+                  <SelectItem value="AUXILIARY">Auxiliary Service</SelectItem>
+                  <SelectItem value="PRAYER">Prayer Meeting</SelectItem>
+                  <SelectItem value="WORKSHOP">Workshop/Training</SelectItem>
                 </SelectContent>
               </Select>
             </div>
