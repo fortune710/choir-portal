@@ -1,9 +1,8 @@
-'use client'
-
-import * as React from 'react'
-import { Calendar } from '@/components/ui/calendar'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import CalendarView from '@/components/home/calender'
+import { getEvents } from '@/services/eventsService'
+import UpcomingEvents from '@/components/home/upcoming-events'
 
 const upcomingEvents = [
   {
@@ -15,31 +14,17 @@ const upcomingEvents = [
   // Add more events...
 ]
 
-export default function HomePage() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+export default async function HomePage() {
+ 
+ const events = await getEvents()
 
+ const upcomingEvents = events.filter((event) => event.date > new Date())
+ console.log(upcomingEvents)  
   return (
-    <div className="flex">
-      <div className="flex-1 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {upcomingEvents.map((event) => (
-          <Card key={event.id}>
-            <CardHeader>
-              <CardTitle>{event.title}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>Date: {event.date}</p>
-              <p>Time: {event.time}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <div className="flex overflow-hidden">   
+        <UpcomingEvents events={upcomingEvents} />
       <div className="hidden lg:block w-80 ml-4">
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-md border"
-        />
+        <CalendarView events={upcomingEvents} />
       </div>
     </div>
   )
