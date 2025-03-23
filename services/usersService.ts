@@ -15,6 +15,7 @@ interface CreateUser extends Omit<User,
       email: true,
       phone_number: true,
       avatar: true,
+      birthday: true,
       roles: {
         include: {
           role: true

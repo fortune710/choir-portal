@@ -5,7 +5,9 @@ import { Calendar } from '@/components/ui/calendar'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
-
+import { Clock, Calendar as CalendarIcon, Users } from 'lucide-react'
+import { getEventTypeColor } from '@/lib/utils'
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface CalendarViewProps {
     events: {
@@ -25,22 +27,97 @@ export default function CalendarView({ events }: CalendarViewProps) {
         return dates
     }, [events])
 
-    return (
+    // Get events for the selected date
+    const selectedDateEvents = React.useMemo(() => {
+        if (!date) return []
+        return events.filter(event =>
+            format(event.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+        )
+    }, [date, events])
 
-        <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-md border"
-            modifiers={{
-                hasEvent: (date) => datesWithEvents.has(format(date, 'yyyy-MM-dd'))
-            }}
-            modifiersStyles={{
-                hasEvent: {
-                    borderBottom: '2px solid hsl(var(--primary))',
-                    borderRadius: '0'
-                }
-            }}
-        />
+    return (
+        <div className="space-y-4 p-4 ">
+            <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className="rounded-md border w-fit"
+                modifiers={{
+                    hasEvent: (date) => datesWithEvents.has(format(date, 'yyyy-MM-dd'))
+                }}
+                modifiersStyles={{
+                    hasEvent: {
+                        position: 'relative',
+                    }
+                }}
+                components={{
+                    DayContent: ({ date, displayMonth, activeModifiers }) => {
+                        const hasEvent = datesWithEvents.has(format(date, 'yyyy-MM-dd'))
+                        const eventsForDate = events.filter(event =>
+                            format(event.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+                        )
+                        return (
+                            <div className="relative">
+                                <span>{date.getDate()}</span>
+                                {hasEvent && eventsForDate.length > 0 && (
+                                    <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 flex gap-1">
+                                        {eventsForDate.map((event, index) => (
+                                            <div
+                                                key={event.id}
+                                                className="w-1.5 h-1.5 rounded-full"
+                                                style={{ backgroundColor: getEventTypeColor(event.type) }}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    }
+                }}
+            />
+
+            {selectedDateEvents.length > 0 && (
+                <ScrollArea className="h-[400px] rounded-md">
+                    <div className="space-y-4 ">
+                        {selectedDateEvents.map((event) => (
+                            <div key={event.id} className="flex flex-col gap-2 p-4 border rounded-lg">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="font-semibold text-lg">{event.name}</h3>
+                                    <Badge className="capitalize" variant="outline">
+                                        {event.type}
+                                    </Badge>
+                                </div>
+
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <CalendarIcon className="h-4 w-4" />
+                                    <span>{format(event.date, 'PPP')}</span>
+                                </div>
+
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Clock className="h-4 w-4" />
+                                    <span>
+                                        {format(event.startTime, 'h:mm ')} - {format(event.endTime, 'h:mm ')}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Users className="h-4 w-4" />
+                                    <div className="flex flex-wrap gap-2">
+                                        {event.teams.length > 0 ? (
+                                            event.teams.map((team: any) => (
+                                                <Badge key={team.team.id} variant="secondary">
+                                                    {team.team.name}
+                                                </Badge>
+                                            ))
+                                        ) : (
+                                            <span className="text-muted-foreground">No teams assigned</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </ScrollArea>
+            )}
+        </div>
     )
 }

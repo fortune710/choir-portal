@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import CalendarView from '@/components/home/calender'
 import { getEvents } from '@/services/eventsService'
 import UpcomingEvents from '@/components/home/upcoming-events'
+import { getUsers } from '@/services/usersService'
+import UpcomingBirthdays from '@/components/home/upcoming-birthdays'
 
 const upcomingEvents = [
   {
@@ -17,15 +19,25 @@ const upcomingEvents = [
 export default async function HomePage() {
  
  const events = await getEvents()
-
+ const users = await getUsers()
  const upcomingEvents = events.filter((event) => event.date > new Date())
- console.log(upcomingEvents)  
+ const usersWithBirthdays = users.filter((user) => {
+     if (!user.birthday) return false
+     return user.birthday > new Date()
+   })
+ 
   return (
-    <div className="flex overflow-hidden">   
-        <UpcomingEvents events={upcomingEvents} />
-      <div className="hidden lg:block w-80 ml-4">
+    <div className="md:flex overflow-x-hidden">   
+      <div className=" md:hidden md:max-w-1/2 m-4">
         <CalendarView events={upcomingEvents} />
+      </div> 
+      <div className='w-svw md:max-w-[35%]'>
+        <UpcomingEvents events={upcomingEvents} />
+        <UpcomingBirthdays members={usersWithBirthdays} />
       </div>
+        <div className="md:block hidden md:max-w-1/2 m-4">
+          <CalendarView events={upcomingEvents} />
+        </div>
     </div>
   )
 }

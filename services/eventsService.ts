@@ -76,6 +76,11 @@ export async function getEvents() {
           team: true,
         },
       },
+      songs: {
+        include: {
+          song: true
+        }
+      }
     },
     orderBy: {
       date: 'asc',
@@ -114,12 +119,12 @@ export async function getCurrentMonthEvents() {
   Create a new event
  */
 
-interface CreateEvent extends Omit<Events, "id" | "createdAt" | "isRecurring" | "childEvents" | 
-"eventLeadUserId" | "recurrenceRule" | "recurrenceRule" | "parentEventId" | "parent" | "eventLead" | 
-"teams" | "songs" | "recurrenceEndDate"> {}
+interface CreateEvent extends Omit<Events, "id" | "createdAt" | "isRecurring" | "childEvents" |
+  "eventLeadUserId" | "recurrenceRule" | "recurrenceRule" | "parentEventId" | "parent" | "eventLead" |
+  "teams" | "songs" | "recurrenceEndDate"> { }
 
 export async function createEvent(data: CreateEvent) {
-  return await prisma.events.create({ 
+  return await prisma.events.create({
     data: {
       ...data,
       isRecurring: false,
@@ -168,51 +173,51 @@ export async function deleteEvent(id: string) {
 }
 
 export async function getEventById(id: string) {
-    return await prisma.events.findUnique({
-        where: { id },
+  return await prisma.events.findUnique({
+    where: { id },
+    include: {
+      teams: {
         include: {
-            teams: {
-                include: {
-                    team: true,
-                },
-            },
+          team: true,
         },
-    });
+      },
+    },
+  });
 }
 
 /*
   Assign a song to an event
  */
-  export async function assignSongToEvent(songId: string, eventId: string) {
-    return await prisma.eventSong.create({
-      data: { songId, eventId },
-    });
-  }
-  
-  /*
-    Remove a song from an event
-   */
-  export async function removeSongFromEvent(songId: string, eventId: string) {
-    return await prisma.eventSong.deleteMany({
-      where: { songId, eventId },
-    });
-  }
-  
-  /*
-    Get all songs for an event
-   */
-  export async function getEventSongs(eventId: string) {
-    return await prisma.eventSong.findMany({
-      where: { eventId },
-      include: {
-        song: true,
-      },
-    });
-  }
+export async function assignSongToEvent(songId: string, eventId: string) {
+  return await prisma.eventSong.create({
+    data: { songId, eventId },
+  });
+}
 
-  /*
-  Get all events that don't have this song assigned
+/*
+  Remove a song from an event
  */
+export async function removeSongFromEvent(songId: string, eventId: string) {
+  return await prisma.eventSong.deleteMany({
+    where: { songId, eventId },
+  });
+}
+
+/*
+  Get all songs for an event
+ */
+export async function getEventSongs(eventId: string) {
+  return await prisma.eventSong.findMany({
+    where: { eventId },
+    include: {
+      song: true,
+    },
+  });
+}
+
+/*
+Get all events that don't have this song assigned
+*/
 export async function getEventsWithoutSong(songId: string) {
   const eventsWithSong = await prisma.eventSong.findMany({
     where: { songId },
