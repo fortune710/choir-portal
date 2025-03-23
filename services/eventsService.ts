@@ -252,6 +252,18 @@ export async function getUpcomingEvents() {
         gte: today,
       },
     },
+    include: {
+      teams: {
+          include: {
+              team: true,
+          },
+      },
+      songs: {
+          include: {
+              song: true,
+          },
+      },
+  },
     orderBy: {
       date: 'asc',
     },

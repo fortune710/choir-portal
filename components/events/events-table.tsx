@@ -34,31 +34,43 @@ export default function EventsTable({ events }: EventsTableProps) {
   const [eventSongsOpen, setEventSongsOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Events | null>(null);
 
-  const openAssignSongs = () => setAssignSongOpen(true);
-  const openEventSongs = () => setEventSongsOpen(true);
-  const openEditDialog = () => setEditDialogOpen(true);
-  const openDeleteAlert = () => setDeleteAlertOpen(true);
-  
-  
+  const openAssignSongs = (event: Events) => {
+    setSelectedEvent(event);
+    setAssignSongOpen(true);
+  };
+  const openEventSongs = (event: Events) => {
+    setSelectedEvent(event);
+    setEventSongsOpen(true);
+  };
+  const openEditDialog = (event: Events) => {
+    setSelectedEvent(event);
+    setEditDialogOpen(true);
+  };
+  const openDeleteAlert = (event: Events) => {
+    setSelectedEvent(event);
+    setDeleteAlertOpen(true);
+  };
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Event Name</TableHead>
-          <TableHead>Type</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Time</TableHead>
-          <TableHead>Teams</TableHead>
-          <TableHead className="w-[50px]" />
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {events.map((event) => (
-          <>
+    <>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Event Name</TableHead>
+            <TableHead>Type</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Time</TableHead>
+            <TableHead>Teams</TableHead>
+            <TableHead className="w-[50px]" />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {events.map((event) => (
             <TableRow key={event.id}>
               <TableCell>
-                  {event.name}
+                {event.name}
               </TableCell>
               <TableCell>
                 <Badge className='capitalize' variant="outline">{event.type}</Badge>
@@ -75,7 +87,7 @@ export default function EventsTable({ events }: EventsTableProps) {
                 ))}
               </TableCell>
               <TableCell>
-              <DropdownMenu>
+                <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-8 w-8">
                       <MoreHorizontal className="h-4 w-4" />
@@ -84,45 +96,48 @@ export default function EventsTable({ events }: EventsTableProps) {
                   <DropdownMenuContent align="end">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={openEditDialog}>Edit</DropdownMenuItem>
-                    <DropdownMenuItem onClick={openEventSongs}>View Assigned Songs</DropdownMenuItem>
-                    <DropdownMenuItem onClick={openAssignSongs}>Assign Song</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openEditDialog(event)}>Edit</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openEventSongs(event)}>View Assigned Songs</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openAssignSongs(event)}>Assign Song</DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={openDeleteAlert} className="text-destructive">Delete</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openDeleteAlert(event)} className="text-destructive">Delete</DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </TableCell>
             </TableRow>
+          ))}
+        </TableBody>
+      </Table>
 
-            <AssignSongDialog 
-                open={assignSongOpen}
-                onOpenChange={setAssignSongOpen}
-                eventId={event.id}
-                eventName={event.name}
-            />
+      {selectedEvent && (
+        <>
+          <AssignSongDialog
+            open={assignSongOpen}
+            onOpenChange={setAssignSongOpen}
+            eventId={selectedEvent.id}
+            eventName={selectedEvent.name}
+          />
 
-            <EventSongsDialog
-                open={eventSongsOpen}
-                onOpenChange={setEventSongsOpen}
-                eventId={event.id}
-                eventName={event.name}
-            />
+          <EventSongsDialog
+            open={eventSongsOpen}
+            onOpenChange={setEventSongsOpen}
+            eventId={selectedEvent.id}
+            eventName={selectedEvent.name}
+          />
 
-            <EditEventDialog
-              open={editDialogOpen}
-              onOpenChange={setEditDialogOpen}
-              event={event}
-            />
-            <DeleteEventAlert
-              open={deleteAlertOpen}
-              onOpenChange={setDeleteAlertOpen}
-              eventId={event.id}
-              eventName={event.name}
-            />
-          
-          </>
-        ))}
-      </TableBody>
-    </Table>
+          <EditEventDialog
+            open={editDialogOpen}
+            onOpenChange={setEditDialogOpen}
+            event={selectedEvent}
+          />
+          <DeleteEventAlert
+            open={deleteAlertOpen}
+            onOpenChange={setDeleteAlertOpen}
+            eventId={selectedEvent.id}
+            eventName={selectedEvent.name}
+          />
+        </>
+      )}
+    </>
   )
 } 
