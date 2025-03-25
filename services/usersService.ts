@@ -16,11 +16,8 @@ interface CreateUser extends Omit<User,
       phone_number: true,
       avatar: true,
       birthday: true,
-      roles: {
-        include: {
-          role: true
-        },
-      },
+      vocalCategory: true,
+      isActive: true,
       //teams: true,
 
     }
@@ -44,13 +41,24 @@ export async function getUserById(id: string) {
 /*
 Update an existing member
  */
-export async function updateUser(id: string, data: Partial<CreateUser>) {
+export async function updateUser(id: string, data: Partial<CreateUser & { isActive: boolean }>) {
   return await prisma.user.update({ where: { id }, data });
 }
 
 /* 
 Delete a member by ID
  */
-export async function deleteuser(id: string) {
+export async function deleteUser(id: string) {
   return await prisma.user.delete({ where: { id } });
+}
+
+export async function getUpcomingBirthdays() {
+  return await prisma.user.findMany({
+    where: {
+      birthday: {
+        gte: new Date(),
+      },
+    },
+    take: 5
+  })
 }
