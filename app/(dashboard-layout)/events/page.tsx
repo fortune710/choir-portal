@@ -32,8 +32,8 @@ export default async function EventsPage() {
   const upcomingDates = upcomingEvents.map(event => new Date(event.date))
 
   return (
-    <div className='grid grid-cols-8 w-full'>
-      <div className="flex flex-col gap-4 md:gap-8 col-span-6">
+    <div className='grid max-md:grid-cols-1 grid-cols-8 w-full'>
+      <div className="flex flex-col gap-4 md:gap-8 md:col-span-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Events</h1>
@@ -71,7 +71,7 @@ export default async function EventsPage() {
         </div>
       </div>
       
-      <section className='col-span-2 px-3.5'>
+      <section className='col-span-2 px-3.5 max-md:hidden'>
         <div className='w-full flex justify-center mb-3'>
           <Calendar
             mode="multiple"
