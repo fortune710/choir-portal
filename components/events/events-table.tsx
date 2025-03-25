@@ -85,6 +85,9 @@ export default function EventsTable({ events }: EventsTableProps) {
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={openEditDialog}>Edit</DropdownMenuItem>
+                    <DropdownMenuItem>View Teams</DropdownMenuItem>
+                    <DropdownMenuItem>Assign Teams</DropdownMenuItem>
+                    <DropdownMenuItem>Assign Members</DropdownMenuItem>
                     <DropdownMenuItem onClick={openEventSongs}>View Assigned Songs</DropdownMenuItem>
                     <DropdownMenuItem onClick={openAssignSongs}>Assign Song</DropdownMenuItem>
                     <DropdownMenuSeparator />
