@@ -51,9 +51,10 @@ export async function removeMemberFromTeam(userId: string, teamId: string) {
     }
 }
 
-export async function updateTeam(teamId: string, data: { name?: string; description?: string }) {
+export async function updateTeam(teamId: string, data: { name?: string; description?: string, coordinatorId?: string }) {
     try {
-        await updateTeamById(teamId, data);
+        const { coordinatorId, ...rest } = data;
+        await updateTeamById(teamId, { ...rest, coordinator_user_id: coordinatorId });
         revalidatePath('/teams');
         return { success: true };
     } catch (error) {

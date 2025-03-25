@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Team } from "@prisma/client";
 
 /*
   Get all teams with their members
@@ -65,7 +66,7 @@ export async function removeUserFromTeam(userId: string, teamId: string) {
 /*
 Update an existing team
  */
-export async function updateTeam(id: string, data: { name?: string; description?: string }) {
+export async function updateTeam(id: string, data: Partial<Team>) {
   return await prisma.team.update({ where: { id }, data });
 }
 
