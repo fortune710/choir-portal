@@ -25,17 +25,17 @@ export default async function HomePage() {
    })
  
   return (
-    <div className="md:flex overflow-x-hidden">   
+    <div className="md:grid md:grid-cols-8 overflow-x-hidden">   
       <div className=" md:hidden md:max-w-1/2 m-4">
         <CalendarView events={upcomingEvents} />
       </div> 
-      <div className='w-svw md:max-w-[35%]'>
+      <div className='max-md:w-svw md:col-span-6'>
         <UpcomingEvents events={upcomingEvents} />
         <UpcomingBirthdays members={usersWithBirthdays} />
       </div>
-        <div className="md:block hidden md:max-w-1/2 m-4">
-          <CalendarView events={upcomingEvents} />
-        </div>
+      <div className="md:block hidden col-span-2">
+        <CalendarView events={upcomingEvents} />
+      </div>
     </div>
   )
 }

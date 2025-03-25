@@ -32,7 +32,7 @@ export default async function EventsPage() {
   const upcomingDates = upcomingEvents.map(event => new Date(event.date))
 
   return (
-    <div className='grid grid-cols-8 w-full border-green-60'>
+    <div className='grid grid-cols-8 w-full'>
       <div className="flex flex-col gap-4 md:gap-8 col-span-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>

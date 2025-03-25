@@ -60,11 +60,11 @@ export default function CalendarView({ events }: CalendarViewProps) {
                             <div className="relative">
                                 <span>{date.getDate()}</span>
                                 {hasEvent && eventsForDate.length > 0 && (
-                                    <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 flex gap-1">
-                                        {eventsForDate.map((event, index) => (
-                                            <div
+                                    <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 flex gap-1 px-0.5">
+                                        {eventsForDate.slice(0, 4).map((event, index) => (
+                                            <span
                                                 key={event.id}
-                                                className="w-1.5 h-1.5 rounded-full"
+                                                className="w-1 h-1 rounded-full"
                                                 style={{ backgroundColor: getEventTypeColor(event.type) }}
                                             />
                                         ))}
@@ -77,46 +77,51 @@ export default function CalendarView({ events }: CalendarViewProps) {
             />
 
             {selectedDateEvents.length > 0 && (
-                <ScrollArea className="h-[400px] rounded-md">
-                    <div className="space-y-4 ">
-                        {selectedDateEvents.map((event) => (
-                            <div key={event.id} className="flex flex-col gap-2 p-4 border rounded-lg">
-                                <div className="flex items-center justify-between">
-                                    <h3 className="font-semibold text-lg">{event.name}</h3>
-                                    <Badge className="capitalize" variant="outline">
-                                        {event.type}
-                                    </Badge>
-                                </div>
-
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <CalendarIcon className="h-4 w-4" />
-                                    <span>{format(event.date, 'PPP')}</span>
-                                </div>
-
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <Clock className="h-4 w-4" />
-                                    <span>
-                                        {format(event.startTime, 'h:mm ')} - {format(event.endTime, 'h:mm ')}
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <Users className="h-4 w-4" />
-                                    <div className="flex flex-wrap gap-2">
-                                        {event.teams.length > 0 ? (
-                                            event.teams.map((team: any) => (
-                                                <Badge key={team.team.id} variant="secondary">
-                                                    {team.team.name}
-                                                </Badge>
-                                            ))
-                                        ) : (
-                                            <span className="text-muted-foreground">No teams assigned</span>
-                                        )}
+                <section>
+                    <h2 className='font-semibold text-lg mb-2'>Scheduled Events</h2>
+                    <ScrollArea className="h-[250px] rounded-md">
+                        <div className="space-y-4">
+                            {selectedDateEvents.map((event) => (
+                                <div key={event.id} className="flex flex-col gap-1 p-4 border rounded-lg">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="font-semibold text-base">{event.name}</h3>
+                                        <Badge className="capitalize text-xs" variant="outline">
+                                            {event.type}
+                                        </Badge>
                                     </div>
+
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <CalendarIcon className="h-4 w-4" />
+                                        <span>{format(event.date, 'PPP')}</span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Clock className="h-4 w-4" />
+                                        <span>
+                                            {format(event.startTime, 'HH:mm ')} - {format(event.endTime, 'HH:mm ')}
+                                        </span>
+
+                                        <div style={{ backgroundColor: getEventTypeColor(event.type) }} className='h-2 w-2 rounded-sm ml-auto' />
+                                    </div>
+                                    {/* <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <Users className="h-4 w-4" />
+                                        <div className="flex flex-wrap gap-2">
+                                            {event.teams.length > 0 ? (
+                                                event.teams.map((team: any) => (
+                                                    <Badge key={team.team.id} variant="secondary">
+                                                        {team.team.name}
+                                                    </Badge>
+                                                ))
+                                            ) : (
+                                                <span className="text-muted-foreground">No teams assigned</span>
+                                            )}
+                                        </div>
+                                    </div> */}
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                </ScrollArea>
+                            ))}
+                        </div>
+                    </ScrollArea>
+                </section>
             )}
         </div>
     )

@@ -3,6 +3,7 @@
 import * as React from 'react'
 import { Home, Users, UsersRound, Music, Calendar, ContactRound } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 
 import {
@@ -33,7 +34,21 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
       <div className="flex min-h-screen w-screen">
         <Sidebar>
           <SidebarHeader>
-            <h2 className="text-xl font-bold">Dashboard</h2>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton size="lg" asChild>
+                  <Link href="/">
+                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                      <Image src="/jhdc-logo.png" alt='Logo' width={32} height={32} className='w-full h-full rounded-lg'  />
+                    </div>
+                    <div className="flex flex-col gap-0.5 leading-none">
+                      <span className="font-semibold">RCCG</span>
+                      <span className="">Jesus House DC</span>
+                    </div>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
           </SidebarHeader>
           <SidebarContent className='px-2'>
             <SidebarMenu>

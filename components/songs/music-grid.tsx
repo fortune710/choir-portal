@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Song } from "@prisma/client"
 import AssignEventDialog from "./assign-event-dialog"
-import { useState } from "react"
+import React, { useState } from "react"
 import EditSongDialog from "./edit-song-dialog"
 import DeleteSongAlert from "./delete-song-alert"
 
@@ -35,9 +35,9 @@ export function MusicGrid({ songs }: MusicGridProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {songs.map((music) => (
-        <>
+        <React.Fragment key={music.id}>
         
-          <Card key={music.id} className="overflow-hidden">
+          <Card className="overflow-hidden">
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">
                 <CardTitle className="text-lg truncate" title={music.title}>
@@ -109,7 +109,7 @@ export function MusicGrid({ songs }: MusicGridProps) {
                 songId={music.id}
                 songTitle={music.title}
             />
-        </>
+        </React.Fragment>
       ))}
     </div>
   )
