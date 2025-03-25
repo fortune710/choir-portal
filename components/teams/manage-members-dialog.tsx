@@ -21,6 +21,7 @@ import { toast } from 'sonner'
 import { UserX } from 'lucide-react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useMembers } from '@/hooks/use-member'
+import { Skeleton } from '../ui/skeleton'
 
 interface ManageMembersDialogProps {
     open: boolean
@@ -103,8 +104,32 @@ export default function ManageMembersDialog({
             <Dialog open={open} onOpenChange={onOpenChange}>
                 <DialogContent className="max-w-2xl">
                     <DialogHeader>
-                        <DialogTitle>Loading...</DialogTitle>
+                        <DialogTitle>Manage Team Members - {team.name}</DialogTitle>
                     </DialogHeader>
+
+                    <div className="space-y-6">
+                        <div className="flex items-end gap-2">
+                            <div className="flex-1">
+                                <Select disabled>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select member to add" />
+                                    </SelectTrigger>
+                                </Select>
+                            </div>
+                            <Button disabled>
+                                Add Member
+                            </Button>
+                        </div>
+
+                        <div className='space-y-3'>
+                            <h3 className="text-base font-semibold mb-3">Current Members</h3>
+                            <Skeleton className="h-16" />
+                            <Skeleton className="h-16" />
+                            <Skeleton className="h-16" />
+                        </div>
+
+                    </div>
+                    
                 </DialogContent>
             </Dialog>
         )
@@ -147,7 +172,7 @@ export default function ManageMembersDialog({
 
                     {/* Current Members List */}
                     <div>
-                        <h3 className="text-sm font-medium mb-3">Current Members</h3>
+                        <h3 className="text-base font-semibold mb-3">Current Members</h3>
                         <ScrollArea className="h-[300px]">
                             <div className="space-y-2">
                                 {teamData?.users?.map((teamMember: any) => (

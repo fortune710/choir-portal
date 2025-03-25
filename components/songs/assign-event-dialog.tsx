@@ -3,7 +3,10 @@
 import { assignSong as assignSongToEvent } from '@/actions/events'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
@@ -45,7 +48,7 @@ export default function AssignEventDialog({
     mutationFn: (eventId: string) => assignSongToEvent(songId, eventId),
     onSuccess: () => {
       toast.success('Song assigned to event')
-      queryClient.invalidateQueries({ queryKey: ['songEvents', songId] })
+      queryClient.invalidateQueries({ queryKey: ['availableEvents', songId] })
     },
     onError: () => toast.error('Failed to assign song to event'),
   })
@@ -55,6 +58,7 @@ export default function AssignEventDialog({
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Assign {songTitle} to Events</DialogTitle>
+          <DialogDescription>You can select as many songs as you like</DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="h-[400px] pr-4">
@@ -86,6 +90,9 @@ export default function AssignEventDialog({
             </div>
           )}
         </ScrollArea>
+        <DialogFooter>
+          <DialogClose className='bg-primary text-white font-semibold px-3 py-2 rounded-sm w-1/6'>Close</DialogClose>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
