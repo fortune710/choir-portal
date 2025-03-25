@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <QueryProvider>
           <NuqsAdapter>
-            <DashboardLayout>{children}</DashboardLayout>
+            {children}
           </NuqsAdapter>
         </QueryProvider>
         <Toaster/>
