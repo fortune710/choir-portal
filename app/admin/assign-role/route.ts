@@ -6,7 +6,7 @@ export async function POST(req: Request) {
     const { userId, role } = await req.json();
 
     // Check if the role exists
-    const existingRole = await prisma.role.findUnique({ where: { name: role } });
+    const existingRole = await prisma.role.findFirst({ where: { name: role } });
     if (!existingRole) {
       return NextResponse.json({ error: "Role does not exist" }, { status: 400 });
     }

@@ -108,7 +108,7 @@ export const authOptions: NextAuthOptions = {
         },
       };
     },
-    async signIn({ user }) {
+    async signIn() {
       return '/'
     }
   },

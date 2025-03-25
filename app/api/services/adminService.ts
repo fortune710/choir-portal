@@ -5,7 +5,7 @@ export async function getUsers() {
 }
 
 export async function assignRole(userId: string, role: string) {
-  const roleRecord = await prisma.role.findUnique({ where: { name: role } });
+  const roleRecord = await prisma.role.findFirst({ where: { name: role } });
 
   if (!roleRecord) {
     throw new Error("Role not found");

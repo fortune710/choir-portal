@@ -9,7 +9,7 @@ interface DecodedToken {
 export async function GET(req: Request) {
   try {
     // Get token from Authorization header
-    const authHeader = req.headers.get("authorization");
+    const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

@@ -11,7 +11,7 @@ export async function GET(
         return NextResponse.json(songs)
     } catch (error) {
         return NextResponse.json(
-            { error: "Failed to fetch event songs" },
+            { error: "Failed to fetch event songs: " + error },
             { status: 500 }
         )
     }

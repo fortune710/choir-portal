@@ -32,9 +32,9 @@ export default function TeamActions({ teamId, teamName, teamDescription, coordin
                 description: `${teamName} has been deleted successfully`
             })
             setDeleteOpen(false)
-        } catch (error) {
+        } catch (error: any) {
             toast.error("Error Deleting Team", {
-                description: "Failed to delete team"
+                description: error.message || "Failed to delete team"
             })
         }
     }

@@ -9,7 +9,7 @@ export async function GET(
         const { id } = await params;
         const events = await getEventsWithoutMember(id)
         return NextResponse.json(events)
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: "Failed to fetch available events" },
             { status: 500 }
