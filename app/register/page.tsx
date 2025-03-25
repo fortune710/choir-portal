@@ -13,12 +13,11 @@ export default function RegisterPage() {
 
 
   async function handleSubmit(formData: FormData) {
-    const name = formData.get('name')
     const email = formData.get('email')?.toString() ?? "";
     const password = formData.get('password')?.toString() ?? "";
     const confirmPassword = formData.get('confirmPassword')
 
-    console.log(name, email, password, confirmPassword)
+    console.log(email, password, confirmPassword)
     const { success } = await register(email, password)
 
     if (success) {
@@ -40,10 +39,6 @@ export default function RegisterPage() {
         <CardContent>
           <form action={handleSubmit}>
             <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your name" required />
-              </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Email</Label>
                 <Input id="email" type="email" placeholder="Your email" required />
