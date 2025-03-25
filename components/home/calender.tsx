@@ -60,7 +60,7 @@ export default function CalendarView({ events }: CalendarViewProps) {
                             <div className="relative">
                                 <span>{date.getDate()}</span>
                                 {hasEvent && eventsForDate.length > 0 && (
-                                    <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 flex gap-1 px-0.5">
+                                    <div className="absolute bottom-[-5px] left-1/2 -translate-x-1/2 flex gap-1">
                                         {eventsForDate.slice(0, 4).map((event, index) => (
                                             <span
                                                 key={event.id}
@@ -101,7 +101,7 @@ export default function CalendarView({ events }: CalendarViewProps) {
                                             {format(event.startTime, 'HH:mm ')} - {format(event.endTime, 'HH:mm ')}
                                         </span>
 
-                                        <div style={{ backgroundColor: getEventTypeColor(event.type) }} className='h-2 w-2 rounded-sm ml-auto' />
+                                        <div style={{ backgroundColor: getEventTypeColor(event.type) }} className='h-2 w-2 rounded-sm' />
                                     </div>
                                     {/* <div className="flex items-center gap-2 text-sm text-muted-foreground">
                                         <Users className="h-4 w-4" />
