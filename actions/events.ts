@@ -1,6 +1,6 @@
 'use server'
 
-import { createEvent, deleteEvent as deleteEventDb, assignTeamToEvent, removeTeamFromEvent, assignSongToEvent, removeSongFromEvent } from "@/services/eventsService";
+import { createEvent, deleteEvent as deleteEventDb, assignTeamToEvent, removeTeamFromEvent, assignSongToEvent, removeSongFromEvent, updateEvent as updateEventDb } from "@/services/eventsService";
 import { revalidatePath } from "next/cache";
 import { eventSchema } from "@/lib/validations/event";
 import { fromZodError } from 'zod-validation-error';
@@ -45,7 +45,7 @@ export async function createNewEvent(formData: FormData) {
             startTime,
             endTime,
             meetingUrl: validatedData.meetingUrl ?? null,
-            dressCode:  validatedData.dressCode ?? null,
+            dressCode: validatedData.dressCode ?? null,
             guestLead: validatedData.guestLead ?? null,
             prayerPoints: validatedData.prayerPoints ?? null,
         });
@@ -61,8 +61,8 @@ export async function createNewEvent(formData: FormData) {
                 error: validationError.message,
             };
         }
-        return { 
-            success: false, 
+        return {
+            success: false,
             error: 'Failed to create event'
         };
     }
@@ -89,33 +89,33 @@ export async function assignTeamsToEvent(eventId: string, teamIds: string[]) {
         }
 
         // Get all team members for the selected teams
-    const teams = await prisma.team.findMany({
-        where: { id: { in: teamIds } },
-        include: {
-          users: {
-            select: { userId: true }
-          }
-        }
-      });
-  
-      // Create array of member assignments
-      const memberAssignments = teams.flatMap(team => 
-        team.users.map(user => ({
-          eventId,
-          memberId: user.userId
-        }))
-      );
-  
-      // Assign teams to event
-      await Promise.all([
-        // Create team assignments
-        Promise.all(
-          teamIds.map(teamId => assignTeamToEvent(teamId, eventId))
-        ),
-        // Create member assignments
-        assignManyMembersToEvent(memberAssignments)
-      ]);
-  
+        const teams = await prisma.team.findMany({
+            where: { id: { in: teamIds } },
+            include: {
+                users: {
+                    select: { userId: true }
+                }
+            }
+        });
+
+        // Create array of member assignments
+        const memberAssignments = teams.flatMap(team =>
+            team.users.map(user => ({
+                eventId,
+                memberId: user.userId
+            }))
+        );
+
+        // Assign teams to event
+        await Promise.all([
+            // Create team assignments
+            Promise.all(
+                teamIds.map(teamId => assignTeamToEvent(teamId, eventId))
+            ),
+            // Create member assignments
+            assignManyMembersToEvent(memberAssignments)
+        ]);
+
 
         revalidatePath('/events');
         return { success: true };
@@ -135,9 +135,9 @@ export async function removeTeamFromEventAction(eventId: string, teamId: string)
             where: { teamId },
             select: { userId: true }
         });
-    
+
         const memberIds = teamMembers.map(tm => tm.userId);
-    
+
         // Remove team and its members
         await Promise.all([
             removeTeamFromEvent(teamId, eventId),
@@ -152,7 +152,7 @@ export async function removeTeamFromEventAction(eventId: string, teamId: string)
             error: 'Failed to remove team from event'
         };
     }
-} 
+}
 
 export async function assignSong(songId: string, eventId: string) {
     try {
@@ -197,3 +197,64 @@ export async function removeSong(songId: string, eventId: string) {
         };
     }
 }
+
+export async function updateEvent(eventId: string, formData: FormData) {
+    try {
+        const data = {
+            name: formData.get("name"),
+            description: formData.get("description"),
+            type: formData.get("type"),
+            date: formData.get("date"),
+            startTime: formData.get("startTime"),
+            endTime: formData.get("endTime"),
+            meetingUrl: formData.get("meetingUrl"),
+            dressCode: formData.get("dressCode"),
+            guestLead: formData.get("guestLead"),
+            prayerPoints: formData.get("prayerPoints"),
+        }
+
+        // Validate the form data
+        const validatedData = eventSchema.parse(data)
+
+        // Convert time strings to Date objects
+        const date = new Date(validatedData.date)
+        const startTime = new Date(date)
+        const [startHours, startMinutes] = validatedData.startTime.split(':')
+        startTime.setHours(parseInt(startHours), parseInt(startMinutes))
+
+        const endTime = new Date(date)
+        const [endHours, endMinutes] = validatedData.endTime.split(':')
+        endTime.setHours(parseInt(endHours), parseInt(endMinutes))
+
+        // Update the event
+        await updateEventDb(eventId, {
+            name: validatedData.name,
+            description: validatedData.description ?? "",
+            type: validatedData.type,
+            date,
+            startTime,
+            endTime,
+            meetingUrl: validatedData.meetingUrl ?? null,
+            dressCode: validatedData.dressCode ?? null,
+            guestLead: validatedData.guestLead ?? null,
+            prayerPoints: validatedData.prayerPoints ?? null,
+        });
+
+        revalidatePath('/events');
+        return { success: true };
+    } catch (error: unknown) {
+        console.error('Error updating event:', error);
+        if (error instanceof ZodError && error.name === 'ZodError') {
+            const validationError = fromZodError(error);
+            return {
+                success: false,
+                error: validationError.message,
+            };
+        }
+        return {
+            success: false,
+            error: 'Failed to update event'
+        };
+    }
+}
+
