@@ -17,6 +17,7 @@ export default async function TeamsPage() {
     description: team.description || '',
     memberCount: team.users.length,
     createdAt: team.created_at,
+    coordinatorId: team.coordinator_user_id ?? "",
   }))
 
   return (

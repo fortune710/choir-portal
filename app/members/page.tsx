@@ -17,9 +17,11 @@ export default async function MembersPage() {
     id: user.id,
     name: user.name,
     email: user.email,
-    phone: user.phone_number,
+    phone_number: user.phone_number,
     avatar: user.avatar,
-    roles: user.roles.map((role) => role.role.name)
+    vocalCategory: user.vocalCategory,
+    isActive: user.isActive,
+    birthday: user.birthday,
   }))
 
   return (
