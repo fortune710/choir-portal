@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
 
 export default function LoginPage() {
   // State for controlled form inputs
@@ -14,15 +16,17 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent page reload
     console.log("Login Attempt:", { email, password });
 
     // TODO: Implement login logic (e.g., API call)
+    await signIn("credentials", { email, password, redirect: true });
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex flex-col gap-4 items-center justify-center min-h-screen bg-background">
+      <Image src="/jhdc-logo.png" alt="Logo" width={70} height={70} className="mx-auto"/>
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Login</CardTitle>

@@ -1,25 +1,37 @@
+"use client"
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { register } from '@/actions/members'
+import { toast } from 'sonner'
 
 export default function RegisterPage() {
 
 
   async function handleSubmit(formData: FormData) {
-    'use server'
     const name = formData.get('name')
-    const email = formData.get('email')
-    const password = formData.get('password')
+    const email = formData.get('email')?.toString() ?? "";
+    const password = formData.get('password')?.toString() ?? "";
     const confirmPassword = formData.get('confirmPassword')
 
     console.log(name, email, password, confirmPassword)
+    const { success } = await register(email, password)
+
+    if (success) {
+      toast.success("Registration Successful")
+    } else {
+      toast.error("Error While Registering")
+    }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+      <Image src="/jhdc-logo.png" alt="Logo" width={70} height={70} className="mx-auto"/>
+
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Register</CardTitle>
