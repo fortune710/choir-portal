@@ -1,6 +1,6 @@
 'use client'
 
-import { updateEvent } from '@/services/eventsService'
+import { updateEvent } from '@/actions/events'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -63,42 +63,28 @@ export default function EditEventDialog({
   const handleSubmit = async (formData: FormData) => {
     try {
       setIsSubmitting(true)
-
-      const validatedDetails = await validateForm(formData)
-
-
-      const date = new Date(formData.get('date') as string)
-      const startTime = new Date(`${formData.get('date')}T${formData.get('startTime')}`)
-      const endTime = new Date(`${formData.get('date')}T${formData.get('endTime')}`)
-
-      await updateEvent(event.id, {
-        name: validatedDetails.name,
-        description: validatedDetails.description ?? undefined,
-        type: validatedDetails.type,
-        date,
-        startTime,
-        endTime,
-      })
+      if(!validateForm(formData)) return
+      await updateEvent(event.id, formData)
 
       toast.success("Event updated successfully")
       onOpenChange(false)
     } catch (error) {
-        if (error instanceof ZodError) {
-            toast.error("Validation Error", {
-              description: error.message
-            })
-            return;
-        }
-        toast.error("Failed to update event", {
-            description: (error as any).message,
+      if (error instanceof ZodError) {
+        toast.error("Validation Error", {
+          description: error.message
         })
+        return;
+      }
+      toast.error("Failed to update event", {
+        description: (error as any).message,
+      })
     } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange} >
       <DialogContent>
         <form action={handleSubmit}>
           <DialogHeader>
@@ -108,20 +94,20 @@ export default function EditEventDialog({
           <section className="space-y-4 my-3">
             <div className='grid gap-2'>
               <Label htmlFor="name">Event Name</Label>
-              <Input 
-                name='name' 
-                id="name" 
+              <Input
+                name='name'
+                id="name"
                 defaultValue={event.name}
-                required 
+                required
               />
             </div>
 
             <div className='grid gap-2'>
               <Label htmlFor="description">Description</Label>
-              <Textarea 
-                name='description' 
+              <Textarea
+                name='description'
                 id="description"
-                defaultValue={event.description} 
+                defaultValue={event.description}
               />
             </div>
 
@@ -132,7 +118,7 @@ export default function EditEventDialog({
                   <SelectValue placeholder="Select event type" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="REHEARSAL">Rehearsal</SelectItem>
+                  <SelectItem value="REHEARSAL">Rehearsal</SelectItem>
                   <SelectItem value="SERVICE">Regular Service</SelectItem>
                   <SelectItem value="AUXILIARY">Auxiliary Service</SelectItem>
                   <SelectItem value="PRAYER">Prayer Meeting</SelectItem>
@@ -143,34 +129,34 @@ export default function EditEventDialog({
 
             <div className='grid gap-2'>
               <Label htmlFor="date">Date</Label>
-              <Input 
-                name='date' 
-                id="date" 
+              <Input
+                name='date'
+                id="date"
                 type="date"
                 defaultValue={formattedDate}
-                required 
+                required
               />
             </div>
 
             <div className='grid grid-cols-2 gap-4'>
               <div className='grid gap-2'>
                 <Label htmlFor="startTime">Start Time</Label>
-                <Input 
-                  name='startTime' 
-                  id="startTime" 
+                <Input
+                  name='startTime'
+                  id="startTime"
                   type="time"
                   defaultValue={formattedStartTime}
-                  required 
+                  required
                 />
               </div>
               <div className='grid gap-2'>
                 <Label htmlFor="endTime">End Time</Label>
-                <Input 
-                  name='endTime' 
-                  id="endTime" 
+                <Input
+                  name='endTime'
+                  id="endTime"
                   type="time"
                   defaultValue={formattedEndTime}
-                  required 
+                  required
                 />
               </div>
             </div>
@@ -187,7 +173,7 @@ export default function EditEventDialog({
                     <Label htmlFor="dressCode">Dress Code (Optional)</Label>
                     <Textarea name='dressCode' id="dressCode" defaultValue={event?.dressCode ?? ""} />
                   </div>
-                
+
                 </>
               ) : ['WORKSHOP', 'PRAYER', 'TOWNHALL'].includes(eventType) ? (
                 <>
@@ -206,10 +192,10 @@ export default function EditEventDialog({
               ) : null
             }
           </section>
-          
+
           <DialogFooter>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Updating..." : "Update Event"}
