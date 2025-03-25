@@ -84,7 +84,7 @@ export default function NewTeamDialog() {
                         </div>
 
                         <div className='grid gap-2'>
-                            <Label htmlFor="team_coordinator">Event Coordinator</Label>
+                            <Label htmlFor="team_coordinator">Team Coordinator</Label>
                             <Select name="team_coordinator" required>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select event coordinator" />

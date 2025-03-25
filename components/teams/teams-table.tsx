@@ -9,6 +9,7 @@ interface TeamsListProps {
     name: string;
     description: string;
     memberCount: number;
+    coordinatorId: string
   }[];
 }
 
@@ -36,6 +37,7 @@ export default function TeamsTable({ teams }: TeamsListProps) {
                   teamId={team.id}
                   teamName={team.name}
                   teamDescription={team.description}
+                  coordinatorId={team.coordinatorId}
                 />
               </TableCell>
             </TableRow>

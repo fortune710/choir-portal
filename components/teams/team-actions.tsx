@@ -1,6 +1,6 @@
 'use client' 
 
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
 import { useState } from 'react';
@@ -9,15 +9,17 @@ import { deleteTeam } from '@/actions/teams';
 import DeleteTeamAlert from './delete-team-alert';
 import EditTeamDialog from './edit-team-dialog';
 import ManageMembersDialog from './manage-members-dialog';
+import { Separator } from '../ui/separator';
 
 
 interface TeamActionsProps {
     teamId: string;
     teamName: string;
     teamDescription: string;
+    coordinatorId: string
 }
 
-export default function TeamActions({ teamId, teamName, teamDescription }: TeamActionsProps) {
+export default function TeamActions({ teamId, teamName, teamDescription, coordinatorId }: TeamActionsProps) {
     const [deleteOpen, setDeleteOpen] = useState(false)
     const [editOpen, setEditOpen] = useState(false)
     const [manageMembersOpen, setManageMembersOpen] = useState(false)
@@ -59,11 +61,13 @@ export default function TeamActions({ teamId, teamName, teamDescription }: TeamA
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                    <MoreHorizontal className="h-4 w-4" />
-                </Button>
+                    <Button variant="outline" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <Separator/>
                     <DropdownMenuItem onClick={handleAction('edit')}>
                         Edit
                     </DropdownMenuItem>
@@ -83,7 +87,7 @@ export default function TeamActions({ teamId, teamName, teamDescription }: TeamA
             <EditTeamDialog 
                 open={editOpen}
                 onOpenChange={setEditOpen}
-                team={{ id: teamId, name: teamName, description: teamDescription }}
+                team={{ id: teamId, name: teamName, description: teamDescription, coordinatorId }}
             />
 
             <ManageMembersDialog 
