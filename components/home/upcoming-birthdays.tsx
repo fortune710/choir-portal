@@ -37,7 +37,7 @@ export default function UpcomingBirthdays({ members }: UpcomingBirthdaysProps) {
         .slice(0, 5) // Show only the next 5 birthdays
 
     return (
-        <Card className=' border-none shadow-none'>
+        <Card className=' border-none shadow-none p-4'>
             <CardHeader>
                 <CardTitle>Upcoming Birthdays</CardTitle>
             </CardHeader>
@@ -50,12 +50,12 @@ export default function UpcomingBirthdays({ members }: UpcomingBirthdaysProps) {
                             <p className="text-sm text-muted-foreground">There are no upcoming birthdays to display.</p>
                         </div>
                     ) : (
-                        <div className="flex w-max space-x-4 p-4">
+                        <div className="flex flex-wrap md:flex-nowrap gap-4 p-4">
                             {upcomingBirthdays.map((member) => (
                                 <div
                                     key={member.id}
                                     className={cn(
-                                        "max-w-[350px] shrink-0 rounded-lg border bg-card p-4",
+                                        "w-full sm:max-w-[350px] shrink-0 rounded-lg border bg-card p-4",
                                         "hover:bg-accent/50 transition-colors relative"
                                     )}
                                 >
