@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { createQueryString } from '@/lib/utils'
+import { useDebounceCallback } from '@/hooks/useDebounceCallback'
 
 interface SearchbarProps {
     placeholder?: string
@@ -16,14 +17,13 @@ export default function Searchbar({ placeholder }: SearchbarProps) {
     const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '')
 
   
-
     // Debounce effect
-    useEffect(() => {
+
    
       useDebounceCallback(() => {
         router.push(`?${createQueryString('search', searchValue)}`)
     }, 500)
-    }, [searchValue, router, createQueryString])
+ 
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchValue(e.target.value)

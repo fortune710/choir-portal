@@ -1,3 +1,7 @@
+'use client'
+
+import { useEffect, useRef } from 'react'
+
 export const useDebounceCallback = (callback: () => void, delay: number) => {
     const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
