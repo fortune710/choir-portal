@@ -36,12 +36,12 @@ export default function CalendarView({ events }: CalendarViewProps) {
     }, [date, events])
 
     return (
-        <div className="space-y-4 p-4 ">
+        <div className="space-y-4 p-4 w-full">
             <Calendar
                 mode="single"
                 selected={date}
                 onSelect={setDate}
-                className="rounded-md border w-fit"
+                className="rounded-md border w-fit max-md:mx-auto"
                 modifiers={{
                     hasEvent: (date) => datesWithEvents.has(format(date, 'yyyy-MM-dd'))
                 }}

@@ -45,13 +45,14 @@ export default async function EventsPage() {
         </div>
 
         <div className="flex-1">
-          <div className="flex flex-col sm:flex-row gap-4 mb-4">
+          <div className="flex flex-row gap-4 mb-4">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input type="search" placeholder="Search events" className="pl-8" />
             </div>
-            <Button variant="outline" className="sm:w-auto">
-              <Filter className="mr-2 h-4 w-4" /> Filter
+            <Button variant="outline" className="md:w-auto w-10">
+              <Filter className="mr-2 max-md:mr-0 h-4 w-4" />
+              <span className='hidden md:block'>Filter</span>
             </Button>
           </div>
 

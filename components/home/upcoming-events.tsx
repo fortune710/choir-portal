@@ -16,7 +16,7 @@ interface UpcomingEventsProps {
 
 export default function UpcomingEvents({ events }: UpcomingEventsProps) {
     return (
-        <Card className=' border-none shadow-none p-4'>
+        <Card className='border-none shadow-none p-4 max-md:p-0'>
             <CardHeader>
                 <CardTitle>Upcoming Events</CardTitle>
             </CardHeader>
@@ -27,7 +27,7 @@ export default function UpcomingEvents({ events }: UpcomingEventsProps) {
                         <p>No upcoming events</p>
                     </div>
                 ) : (
-                    <ScrollArea className="h-fit w-full rounded-md ">
+                    <ScrollArea className="h-fit w-full rounded-md">
                         <div className="flex flex-wrap md:flex-nowrap gap-4">
                             {events.map((event: any) => {
                                 const color = getEventTypeColor(event.type)
