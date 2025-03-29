@@ -1,15 +1,12 @@
 import * as React from 'react'
-import { Filter, Search } from 'lucide-react'
-
-import { Button } from '@/components/ui/button'
 
 import NewSongDialog from '@/components/songs/new-song-dialog'
-import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { MusicGrid } from '@/components/songs/music-grid'
 import { Card, CardContent } from '@/components/ui/card'
 import { MusicTable } from '@/components/songs/music-table'
 import { getSongs } from "@/services/songsService";
+import Searchbar from '@/components/searchbar'
 
 
 export default async function SongsPage() {
@@ -28,15 +25,7 @@ export default async function SongsPage() {
       </div>
 
       <div className="flex-1">
-        <div className="flex flex-col sm:flex-row gap-4 mb-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input type="search" placeholder="Search music..." className="pl-8" />
-          </div>
-          <Button variant="outline" className="sm:w-auto">
-            <Filter className="mr-2 h-4 w-4" /> Sort
-          </Button>
-        </div>
+        <Searchbar placeholder='Search Music' />
 
         {songs.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[400px] border rounded-lg">

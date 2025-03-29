@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { getEvents, getUpcomingEvents } from '@/services/eventsService'
-import { Filter, Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+
 import { Card, CardContent } from '@/components/ui/card'
 import EventsTable from '@/components/events/events-table'
 import NewEventDialog from '@/components/events/new-event-dialog'
 import { Calendar } from '@/components/ui/calendar'
 import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
+import Searchbar from '@/components/searchbar'
 
 export default async function EventsPage() {
   const [eventsData, upcomingEvents] = await Promise.all([
@@ -45,16 +44,7 @@ export default async function EventsPage() {
         </div>
 
         <div className="flex-1">
-          <div className="flex flex-row gap-4 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input type="search" placeholder="Search events" className="pl-8" />
-            </div>
-            <Button variant="outline" className="md:w-auto w-10">
-              <Filter className="mr-2 max-md:mr-0 h-4 w-4" />
-              <span className='hidden md:block'>Filter</span>
-            </Button>
-          </div>
+          <Searchbar placeholder='Search events'/>
 
           {events.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-[400px] border rounded-lg">
