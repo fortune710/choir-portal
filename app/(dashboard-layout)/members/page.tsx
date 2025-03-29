@@ -3,11 +3,9 @@ import * as React from 'react'
 
 import NewMemberForm from '@/components/members/new-member-dialog'
 import { getUsers } from '@/services/usersService'
-import { Filter, Search } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import MembersTable from '@/components/members/members-table';
+import Searchbar from '@/components/searchbar';
 
 
 export default async function MembersPage() {
@@ -37,15 +35,7 @@ export default async function MembersPage() {
       </div>
 
       <div className="flex-1">
-        <div className="flex flex-col sm:flex-row gap-4 mb-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input type="search" placeholder="Search members" className="pl-8" />
-          </div>
-          <Button variant="outline" className="sm:w-auto">
-            <Filter className="mr-2 h-4 w-4" /> Sort
-          </Button>
-        </div>
+        <Searchbar placeholder='Search members' />
 
         {members.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[400px] border rounded-lg">

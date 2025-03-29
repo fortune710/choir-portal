@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import NewTeamDialog from '@/components/teams/new-team-dialog'
 import TeamsTable from '@/components/teams/teams-table'
 import { getTeams } from '@/services/teamsService'
+import Searchbar from '@/components/searchbar'
 
 export default async function TeamsPage() {
   const teamsData = await getTeams()
@@ -33,15 +34,7 @@ export default async function TeamsPage() {
       </div>
 
       <div className="flex-1">
-        <div className="flex flex-col sm:flex-row gap-4 mb-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input type="search" placeholder="Search teams" className="pl-8" />
-          </div>
-          <Button variant="outline" className="sm:w-auto">
-            <Filter className="mr-2 h-4 w-4" /> Sort
-          </Button>
-        </div>
+        <Searchbar placeholder='Search Teams' />
 
         {teams.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-[400px] border rounded-lg">

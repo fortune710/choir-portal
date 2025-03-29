@@ -32,8 +32,8 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-screen">
-        <Sidebar>
-          <SidebarHeader>
+        <Sidebar aria-describedby='Sidebar Menu'>
+          <SidebarHeader className='bg-background'>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton size="lg" asChild>
@@ -50,7 +50,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarHeader>
-          <SidebarContent className='px-2'>
+          <SidebarContent aria-describedby='Sidebar Menu' className='px-2 bg-background'>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -65,7 +65,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
-        <div className="flex-1">
+        <div className="flex-1 max-md:w-screen">
           <header className="flex h-16 items-center border-b px-4">
             <SidebarTrigger />
           </header>

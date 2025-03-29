@@ -59,10 +59,10 @@ export default function EventsTable({ events }: EventsTableProps) {
         <TableHeader>
           <TableRow>
             <TableHead>Event Name</TableHead>
-            <TableHead>Type</TableHead>
+            <TableHead className='hidden md:block'>Type</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Time</TableHead>
-            <TableHead>Teams</TableHead>
+            <TableHead className='hidden md:block'>Teams</TableHead>
             <TableHead className="w-[50px]" />
           </TableRow>
         </TableHeader>
@@ -72,14 +72,14 @@ export default function EventsTable({ events }: EventsTableProps) {
               <TableCell>
                 {event.name}
               </TableCell>
-              <TableCell>
+              <TableCell className='hidden md:block'>
                 <Badge className='capitalize' variant="outline">{event.type}</Badge>
               </TableCell>
               <TableCell>{format(event.date, 'PPP')}</TableCell>
               <TableCell>
-                {format(event.startTime, 'p')} - {format(event.endTime, 'p')}
+                {format(event.startTime, 'HH:mm')} - {format(event.endTime, 'HH:mm')}
               </TableCell>
-              <TableCell>
+              <TableCell className='hidden md:block'>
                 {event.teams.map((team) => (
                   <Badge key={team} variant="secondary" className="mr-1">
                     {team}
