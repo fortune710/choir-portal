@@ -3,7 +3,8 @@ import { Filter, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createQueryString } from '@/lib/utils'
 
 interface SearchbarProps {
     placeholder?: string
@@ -14,22 +15,14 @@ export default function Searchbar({ placeholder }: SearchbarProps) {
     const searchParams = useSearchParams()
     const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '')
 
-    const createQueryString = useCallback(
-        (name: string, value: string) => {
-            const params = new URLSearchParams(searchParams.toString())
-            params.set(name, value)
-            return params.toString()
-        },
-        [searchParams]
-    )
+  
 
     // Debounce effect
     useEffect(() => {
-        const timer = setTimeout(() => {
-            router.push(`?${createQueryString('search', searchValue)}`)
-        }, 500) // 500ms delay
-
-        return () => clearTimeout(timer)
+   
+      useDebounceCallback(() => {
+        router.push(`?${createQueryString('search', searchValue)}`)
+    }, 500)
     }, [searchValue, router, createQueryString])
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
