@@ -17,11 +17,9 @@ export default function Searchbar({ placeholder }: SearchbarProps) {
     const [searchValue, setSearchValue] = useState(searchParams.get('search') ?? '')
 
   
-    // Debounce effect
-
-   
-      useDebounceCallback(() => {
-        router.push(`?${createQueryString('search', searchValue)}`)
+    useDebounceCallback(() => {
+      if (searchValue === '') return
+       router.push(`?${createQueryString('search', searchValue)}`)
     }, 500)
  
 

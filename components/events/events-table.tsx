@@ -24,7 +24,10 @@ import { useState } from 'react'
 import AssignSongDialog from './assign-song-dialog'
 import DeleteEventAlert from './delete-event-dialog'
 import EditEventDialog from './edit-event-dialog'
+import ManageTeamsDialog from './manage-teams-dialog'
+import AssignMembersDialog from './assign-members-dialog'
 import { Events } from '@prisma/client'
+import ManageMembersDialog from './members-event-dialog'
 interface EventsTableProps {
   events: Array<Events & { teams: string[] }>
 }
@@ -35,7 +38,8 @@ export default function EventsTable({ events }: EventsTableProps) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<Events | null>(null);
-
+  const [manageTeamsOpen, setManageTeamsOpen] = useState(false);
+  const [assignMembersOpen, setAssignMembersOpen] = useState(false);
   const openAssignSongs = (event: Events) => {
     setSelectedEvent(event);
     setAssignSongOpen(true);
@@ -52,6 +56,15 @@ export default function EventsTable({ events }: EventsTableProps) {
     setSelectedEvent(event);
     setDeleteAlertOpen(true);
   };
+  const openManageTeams = (event: Events) => {
+    setSelectedEvent(event);
+    setManageTeamsOpen(true);
+  };
+  const openAssignMembers = (event: Events) => {
+    setSelectedEvent(event);
+    setAssignMembersOpen(true);
+  };
+
 
   return (
     <>
@@ -97,9 +110,8 @@ export default function EventsTable({ events }: EventsTableProps) {
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => openEditDialog(event)}>Edit</DropdownMenuItem>
-                    <DropdownMenuItem>View Teams</DropdownMenuItem>
-                    <DropdownMenuItem>Assign Teams</DropdownMenuItem>
-                    <DropdownMenuItem>Assign Members</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openManageTeams(event)}>Assign Teams</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openAssignMembers(event)}>Assign Members</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => openEventSongs(event)}>View Assigned Songs</DropdownMenuItem>
                     <DropdownMenuItem onClick={() => openAssignSongs(event)}>Assign Song</DropdownMenuItem>
                     <DropdownMenuSeparator />
@@ -136,6 +148,17 @@ export default function EventsTable({ events }: EventsTableProps) {
           <DeleteEventAlert
             open={deleteAlertOpen}
             onOpenChange={setDeleteAlertOpen}
+            eventId={selectedEvent.id}
+            eventName={selectedEvent.name}
+          />
+          <ManageTeamsDialog
+            open={manageTeamsOpen}
+            onOpenChange={setManageTeamsOpen}
+            event={selectedEvent}
+          />
+          <ManageMembersDialog
+            open={assignMembersOpen}
+            onOpenChange={setAssignMembersOpen}
             eventId={selectedEvent.id}
             eventName={selectedEvent.name}
           />
