@@ -17,5 +17,13 @@ export function getEventTypeColor(type: EventType): string {
   }
   return colors[type]
 }
+export const createQueryString = (name: string, value: string) => {
+  const params = new URLSearchParams()
+  params.set(name, value)
+  return params.toString()
+}
+
+
+
 
 

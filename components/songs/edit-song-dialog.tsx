@@ -91,16 +91,6 @@ export default function EditSongDialog({
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="mp3_url">Sheet Music URL (Optional)</Label>
-            <Input
-              id="mp3_url"
-              name="mp3_url"
-              type="url"
-              defaultValue={song.mp3_url || ''}
-              placeholder="https://example.com/sheet-music.pdf"
-            />
-          </div>
 
           <DialogFooter>
             <Button
