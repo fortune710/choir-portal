@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn, getEventTypeColor } from '@/lib/utils'
+import Link from 'next/link'
 
 
 
@@ -32,7 +33,8 @@ export default function UpcomingEvents({ events }: UpcomingEventsProps) {
                             {events.map((event: any) => {
                                 const color = getEventTypeColor(event.type)
                                
-                                return <div
+                                return <Link
+                                    href={`/events/${event.id}`}
                                     key={event.id}
                                     className={cn(
                                         "w-full sm:max-w-[350px] shrink-0 rounded-lg border bg-card p-4",
@@ -85,7 +87,7 @@ export default function UpcomingEvents({ events }: UpcomingEventsProps) {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
                             })}
                         </div>
                         <ScrollBar orientation="horizontal" />

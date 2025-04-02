@@ -31,10 +31,10 @@ export default function AssignSongDialog({
 }: AssignSongDialogProps) {
   const queryClient = useQueryClient()
 
-    const { data: songs, isLoading } = useSongs(open);
+  const { data: songs, isLoading } = useSongs(open);
 
   const { mutate: assignSong } = useMutation({
-    mutationFn: (songId: string) => assignSongToEvent(eventId, songId),
+    mutationFn: (songId: string) => assignSongToEvent(songId, eventId),
     onSuccess: () => {
       toast.success('Song assigned successfully')
       queryClient.invalidateQueries({ queryKey: ['eventSongs', eventId] })

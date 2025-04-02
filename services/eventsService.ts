@@ -181,6 +181,16 @@ export async function getEventById(id: string) {
           team: true,
         },
       },
+      songs: {
+        include: {
+          song: true,
+        },
+      },  
+      members: {
+        include: {
+          member: true,
+        },
+      },
     },
   });
 }
@@ -254,16 +264,16 @@ export async function getUpcomingEvents() {
     },
     include: {
       teams: {
-          include: {
-              team: true,
-          },
+        include: {
+          team: true,
+        },
       },
       songs: {
-          include: {
-              song: true,
-          },
+        include: {
+          song: true,
+        },
       },
-  },
+    },
     orderBy: {
       date: 'asc',
     },
