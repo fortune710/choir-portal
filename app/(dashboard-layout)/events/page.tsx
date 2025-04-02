@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { format } from 'date-fns'
 import Searchbar from '@/components/searchbar'
 
-export default async function EventsPage() {
+export default async function EventsPage({searchParams}: {searchParams: {search: string}}) {
   const [eventsData, upcomingEvents] = await Promise.all([
     getEvents(),
     getUpcomingEvents()
@@ -26,6 +26,9 @@ export default async function EventsPage() {
     endTime: event.endTime,
     teams: event.teams.map(eventTeam => eventTeam.team.name)
   }))
+  const search = await searchParams
+
+  console.log(search.search)
 
   // Format upcoming events for the calendar
   const upcomingDates = upcomingEvents.map(event => new Date(event.date))

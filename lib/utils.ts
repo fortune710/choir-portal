@@ -17,12 +17,19 @@ export function getEventTypeColor(type: EventType): string {
   }
   return colors[type]
 }
+
 export const createQueryString = (name: string, value: string) => {
   const params = new URLSearchParams()
   params.set(name, value)
   return params.toString()
 }
 
+export function formatTime(seconds: number): string {
+  if (isNaN(seconds)) return '0:00'
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = Math.floor(seconds % 60)
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`
+}
 
 
 

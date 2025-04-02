@@ -25,14 +25,16 @@ import AssignSongDialog from './assign-song-dialog'
 import DeleteEventAlert from './delete-event-dialog'
 import EditEventDialog from './edit-event-dialog'
 import ManageTeamsDialog from './manage-teams-dialog'
-import AssignMembersDialog from './assign-members-dialog'
 import { Events } from '@prisma/client'
 import ManageMembersDialog from './members-event-dialog'
+import { useQueryState } from 'nuqs'
 interface EventsTableProps {
   events: Array<Events & { teams: string[] }>
 }
 
 export default function EventsTable({ events }: EventsTableProps) {
+  const [getQuery] = useQueryState('search')
+  const filteredEvents = events.filter((event) => event.name.toLowerCase().includes((getQuery || '').toLowerCase()))
   const [assignSongOpen, setAssignSongOpen] = useState(false);
   const [eventSongsOpen, setEventSongsOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -80,7 +82,7 @@ export default function EventsTable({ events }: EventsTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {events.map((event) => (
+          {filteredEvents.map((event) => (
             <TableRow key={event.id}>
               <TableCell>
                 {event.name}
